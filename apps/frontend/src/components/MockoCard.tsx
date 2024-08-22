@@ -1,12 +1,12 @@
-import { emailMocko } from "@/lib/api";
-import { Mocko, MockoType } from "@/model/mocko";
-import { PropsWithChildren, useCallback, useState } from "react";
-import { Popover, PopoverContent } from "./ui/popover";
-import { Input } from "./ui/input";
-import { PopoverTrigger } from "@radix-ui/react-popover";
-import { Label } from "./ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { emailMocko } from '@/lib/api';
+import { Mocko, MockoType } from '@/model/mocko';
+import { PropsWithChildren, useCallback, useState } from 'react';
+import { Popover, PopoverContent } from './ui/popover';
+import { Input } from './ui/input';
+import { PopoverTrigger } from '@radix-ui/react-popover';
+import { Label } from './ui/label';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Form,
   FormControl,
@@ -14,14 +14,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { SubmitHandler, useForm } from "react-hook-form";
+} from './ui/form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const prefixes: Record<MockoType, string> = {
-  [MockoType.AIStructured]: "AI Structured",
-  [MockoType.AIProse]: "AI Prose",
-  [MockoType.Deterministic]: "Deterministic",
-  [MockoType.Fixed]: "Fixed",
+  [MockoType.AIStructured]: 'AI Structured',
+  [MockoType.AIProse]: 'AI Prose',
+  [MockoType.Deterministic]: 'Deterministic',
+  [MockoType.Fixed]: 'Fixed',
 };
 
 export default function MockoCard({ mocko }: { mocko: Mocko }) {
@@ -73,7 +73,7 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
         setIsSuccessEmail(false);
       }, 1000);
     },
-    [],
+    []
   );
 
   const onEmailClose = useCallback(() => {
