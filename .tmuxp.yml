@@ -1,0 +1,8 @@
+session_name: mocko
+start_directory: ./
+windows:
+  - window_name: DEV
+    layout: even-horizontal
+    panes:
+      - nx serve frontend
+      - nx serve backend
