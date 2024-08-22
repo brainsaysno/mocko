@@ -25,6 +25,12 @@
     },
     "tidy": {
       "executor": "@nx-go/nx-go:tidy"
+    },
+    "targets": {
+      "docker-build": {
+        "dependsOn": ["build"],
+        "command": "docker build -f apps/backend/Dockerfile . -t backend"
+      }
     }
   }
 }
