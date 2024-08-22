@@ -1,7 +1,7 @@
 import { H1 } from '@/components/typography/h1';
 import { buttonVariants } from '@/components/ui/button';
 import useMockos from '@/hooks/useMockos';
-import { Link, createLazyFileRoute } from '@tanstack/react-router';
+import { Link, createLazyFileRoute, useRouter } from '@tanstack/react-router';
 import MockoLogo from '../assets/mocko-logo.webp';
 import { P } from '@/components/typography/p';
 import { motion } from 'framer-motion';
@@ -12,6 +12,7 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
   const { data } = useMockos();
+
   return (
     <main className="h-screen flex flex-col justify-center items-center gap-4 overflow-hidden p-0 bg-pattern">
       <motion.div

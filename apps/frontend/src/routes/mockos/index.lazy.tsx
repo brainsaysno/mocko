@@ -9,10 +9,10 @@ export const Route = createLazyFileRoute('/mockos/')({
 });
 
 function Mockos() {
-  const { isSuccess, data } = useMockos();
+  const { isSuccess, isLoading, data } = useMockos();
   const navigate = useNavigate();
 
-  if (!data || data.length == 0) navigate({ to: '/' });
+  if (isSuccess && data.length == 0) navigate({ to: '/' });
 
   return (
     <main className="w-screen h-screen overflow-hidden p-12 bg-pattern">
@@ -27,7 +27,7 @@ function Mockos() {
       </header>
       <section className="flex justify-center gap-6 flex-wrap">
         {isSuccess ? data.map((m) => <MockoCard mocko={m} />) : null}
-        {isSuccess && data.length == 0 ? <p></p> : null}
+        {isLoading ? <p>Loading...</p> : null}
       </section>
     </main>
   );
