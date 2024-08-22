@@ -22,6 +22,7 @@
     "dexie": "^4.0.8",
     "framer-motion": "^11.3.28",
     "lucide-react": "^0.428.0",
+    "posthog-js": "^1.157.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.52.2",
