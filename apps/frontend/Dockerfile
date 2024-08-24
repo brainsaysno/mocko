@@ -10,19 +10,14 @@ RUN addgroup --system frontend && \
 
 COPY . .
 
-RUN npm --prefix frontend --omit=dev -f install
+RUN pnpm --prefix frontend --omit=dev -f install
 
-RUN npx nx
-
+RUN npx nx build frontend
 
 
 FROM build
 
-COPY dist/apps/frontend frontend/
+COPY /app/dist/apps/frontend frontend/
 RUN chown -R frontend:frontend .
-
-# You can remove this install step if you build with `--bundle` option.
-# The bundled output will include external dependencies.
-RUN npm --prefix frontend --omit=dev -f install
 
 CMD [ "node", "frontend" ]

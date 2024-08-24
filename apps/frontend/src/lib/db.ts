@@ -1,20 +1,24 @@
-import Dexie, { type EntityTable } from "dexie";
+import { LLMModel, MockoType } from '@/model/mocko';
+import Dexie, { type EntityTable } from 'dexie';
+import { z } from 'zod';
 
-interface Mocko {
-  id: number;
-  type: string;
-  name: string;
-  prompt?: string;
-  content?: string;
-  model?: string;
-}
+export const dbMockoSchema = z.object({
+  id: z.number(),
+  type: z.nativeEnum(MockoType),
+  name: z.string(),
+  prompt: z.string().optional(),
+  content: z.string().optional(),
+  model: z.nativeEnum(LLMModel).optional(),
+});
 
-const db = new Dexie("MockoDatabase") as Dexie & {
-  mockos: EntityTable<Mocko, "id">;
+type Mocko = z.infer<typeof dbMockoSchema>;
+
+const db = new Dexie('MockoDatabase') as Dexie & {
+  mockos: EntityTable<Mocko, 'id'>;
 };
 
 db.version(1).stores({
-  mockos: "++id, type, name, prompt, content, model",
+  mockos: '++id, type, name, prompt, content, model',
 });
 
 export type { Mocko };

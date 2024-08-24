@@ -3,7 +3,7 @@ import { H1 } from '@/components/typography/h1';
 import { buttonVariants } from '@/components/ui/button';
 import useMockos from '@/hooks/useMockos';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
-import MockoLogo from '../../assets/mocko-logo.webp';
+import MockoEyesClosed from '../../assets/mocko-eyes-closed.webp';
 import { motion } from 'framer-motion';
 
 export const Route = createLazyFileRoute('/mockos/')({
@@ -37,7 +37,7 @@ function Mockos() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <img src={MockoLogo} className="-rotate-12" />
+        <img src={MockoEyesClosed} className="-rotate-12" />
       </motion.div>
     </main>
   );

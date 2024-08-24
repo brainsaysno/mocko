@@ -1,18 +1,20 @@
-import { generateAIProseMocko } from "@/lib/api";
-import { z } from "zod";
+import { generateAIProseMocko } from '@/lib/api';
+import { z } from 'zod';
 
 export enum MockoType {
-  AIProse = "ai-prose",
-  AIStructured = "ai-structured",
-  Deterministic = "deterministic",
-  Fixed = "fixed",
+  AIProse = 'ai-prose',
+  AIStructured = 'ai-structured',
+  Deterministic = 'deterministic',
+  Fixed = 'fixed',
 }
 
 export abstract class Mocko {
+  id: number;
   type: MockoType;
   name: string;
 
-  constructor(type: MockoType, name: string) {
+  constructor(id: number, type: MockoType, name: string) {
+    this.id = id;
     this.type = type;
     this.name = name;
   }
@@ -32,23 +34,25 @@ export abstract class Mocko {
 }
 
 export enum LLMModel {
-  Gpt4o = "gpt-4o",
-  Gpt4Turbo = "gpt-4-turbo",
-  Gpt35Turbo = "gpt-3.5-turbo",
+  Gpt4o = 'gpt-4o',
+  Gpt4oMini = 'gpt-4o-mini',
+  Gpt4Turbo = 'gpt-4-turbo',
+  Gpt35Turbo = 'gpt-3.5-turbo',
 }
 
 export class AIProseMocko extends Mocko {
   prompt: string;
   model: LLMModel;
 
-  constructor(name: string, prompt: string, model: LLMModel) {
-    super(MockoType.AIProse, name);
+  constructor(id: number, name: string, prompt: string, model: LLMModel) {
+    super(id, MockoType.AIProse, name);
     this.prompt = prompt;
     this.model = model;
   }
 
   static fromJson(json: any) {
     const schema = z.object({
+      id: z.number(),
       name: z.string(),
       prompt: z.string(),
       model: z.nativeEnum(LLMModel),
@@ -56,7 +60,7 @@ export class AIProseMocko extends Mocko {
 
     const dto = schema.parse(json);
 
-    return new AIProseMocko(dto.name, dto.prompt, dto.model);
+    return new AIProseMocko(dto.id, dto.name, dto.prompt, dto.model);
   }
 
   async generateOne() {
@@ -67,27 +71,28 @@ export class AIProseMocko extends Mocko {
 export class FixedMocko extends Mocko {
   content: string;
 
-  constructor(name: string, content: string) {
-    super(MockoType.Fixed, name);
+  constructor(id: number, name: string, content: string) {
+    super(id, MockoType.Fixed, name);
     this.content = content;
   }
 
   static fromJson(json: any) {
     const schema = z.object({
+      id: z.number(),
       name: z.string(),
       content: z.string(),
     });
 
     const dto = schema.parse(json);
 
-    return new FixedMocko(dto.name, dto.content);
+    return new FixedMocko(dto.id, dto.name, dto.content);
   }
 
   async generateOne() {
     const variableRegex = /{{\s?(\w+)\s?}}/;
 
     return this.content.replace(variableRegex, (_, identifier) => {
-      return "VAR_" + identifier;
+      return 'VAR_' + identifier;
     });
   }
 }
