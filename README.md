@@ -1,82 +1,162 @@
-# Mocko
+<div id="top"></div>
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+<div align="center">
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+</div>
 
-## Finish your CI setup
+<br />
+<div align="center">
+  <a href="https://github.com/brainsaysno/mocko">
+    <img src="assets/logo.jpeg" alt="Mocko Logo" style="width: 200px">
+  </a>
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/6J37gK9ZYD)
+<h1 align="center">Mocko</h1>
 
+  <p align="center">
+    <a href="https://github.com/brainsaysno/mocko"><strong>Explore docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://mocko.nrusso.dev/">Go to the website</a>
+    ·
+    <a href="https://github.com/brainsaysno/mocko/issues/new?labels=enhancement">Suggest a feature</a>
+    ·
+    <a href="https://github.com/brainsaysno/mocko/issues/new?labels=bug">Report a bug</a>
+    
+  </p>
+</div>
 
-## Run tasks
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About the Project</a>
+      <ul>
+        <li><a href="#technologies">Technologies</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#building-locally">Building Locally</a>
+      <ul>
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#contributing">Contributing</a>
+      <ul>
+      <li><a href="#suggesting-improvements-or-reporting-bugs">Suggesting Improvements or Reporting Bugs</a></li>
+      <li><a href="#resolving-issues">Resolving Issues</a></li>
+      </ul>
+    </li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-To run the dev server for your app, use:
+## About the Project
 
-```sh
-npx nx serve frontend
-```
+> TODO: Add project description
 
-To create a production bundle:
+### Technologies
 
-```sh
-npx nx build frontend
-```
+#### Development
 
-To see all available targets to run for a project, run:
+- [Typescript](https://www.typescriptlang.org/)
 
-```sh
-npx nx show project frontend
-```
-        
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+> TODO: Add technologies
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+#### Design and Prototyping
 
-## Add new projects
+- [Figma](https://www.figma.com)
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+## Building Locally
 
-Use the plugin's generator to create new projects.
+### Requirements
 
-To generate a new application, use:
+- [pnpm](https://pnpm.io/)
+  ```sh
+  npm install -g pnpm
+  ```
+- [nx](https://nx.dev/)
+  ```sh
+  pnpm i -g nx
+  ```
 
-```sh
-npx nx g @nx/react:app demo
-```
+### Installation
 
-To generate a new library, use:
+1. Clone the repository:
 
-```sh
-npx nx g @nx/react:lib mylib
-```
+   ```sh
+   git clone https://github.com/brainsaysno/mocko.git
+   ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+2. Install the dependencies:
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+   ```sh
+   pnpm i
+   ```
 
+3. If you use tmux, there is a tmuxp configuration to start the server; otherwise, start both the front and back end:
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+   ```sh
+   nx serve frontend
+   ```
 
-## Install Nx Console
+   ```sh
+   nx serve backend
+   ```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+## Features
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+> TODO: Add screenshots
 
-## Useful links
+## Contributing
 
-Learn more:
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Besides giving the project a star, **there are 2 main ways to contribute**:
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Suggesting Improvements or Reporting Bugs
+
+- To **suggest an improvement**, create an [_issue_](https://github.com/brainsaysno/mocko/issues/new?labels=enhancement) that includes the "enhancement" label, with the name of the proposal as the title and a brief description of it or why we should implement it.
+
+- To **report a bug**, create an [_issue_](https://github.com/brainsaysno/mocko/issues/new?labels=bug) that includes the "bug" label, with a description of the bug as the title and a brief comment on how you discovered it.
+
+### Resolving Issues
+
+If you find an [issue](https://github.com/brainsaysno/mocko/issues) you want to resolve, you can submit a PR with your code. To do this:
+
+1. Create a [_fork_](https://github.com/brainsaysno/mocko/fork) of the project
+2. Clone the project to your computer (`git clone https://www.github.com/YOUR-USERNAME/mocko.git`)
+3. Create a branch for your proposal (`git checkout -b feature/PROPOSAL-NAME`)
+4. Make changes to the code
+5. Commit your changes (`git commit -m 'Add PROPOSAL-NAME'`)
+6. Push to your branch (`git push origin feature/PROPOSAL-NAME`)
+7. Open a new [_pull request_](https://github.com/brainsaysno/mocko/compare) explaining your proposal and mentioning the relevant issue.
+
+## License
+
+Distributed under the GPL-3.0 License. See [license](LICENSE) for more information.
+
+## Contact
+
+Nicolás Russo - [nrusso@nrusso.dev](nrusso@nrusso.dev)
+
+Project Link: [https://github.com/brainsaysno/mocko](https://github.com/brainsaysno/mocko)
+
+[contributors-shield]: https://img.shields.io/github/contributors/brainsaysno/mocko.svg?style=for-the-badge
+[contributors-url]: https://github.com/brainsaysno/mocko/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/brainsaysno/mocko.svg?style=for-the-badge
+[forks-url]: https://github.com/brainsaysno/mocko/network/members
+[stars-shield]: https://img.shields.io/github/stars/brainsaysno/mocko.svg?style=for-the-badge
+[stars-url]: https://github.com/brainsaysno/mocko/stargazers
+[issues-shield]: https://img.shields.io/github/issues/brainsaysno/mocko.svg?style=for-the-badge
+[issues-url]: https://github.com/brainsaysno/mocko/issues
+[license-shield]: https://img.shields.io/github/license/brainsaysno/mocko.svg?style=for-the-badge
+[license-url]: https://github.com/brainsaysno/mocko/blob/main/LICENSE
