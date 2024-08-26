@@ -107,6 +107,9 @@ importers:
       '@radix-ui/react-tabs':
         specifier: ^1.1.0
         version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@stepperize/react':
+        specifier: ^3.0.1
+        version: 3.0.1(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.51.24
         version: 5.51.24(react@18.3.1)
@@ -2001,6 +2004,11 @@ packages:
 
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
+
+  '@stepperize/react@3.0.1':
+    resolution: {integrity: sha512-1U9oN3hVghVvGpQSo7ZTPYunY+9YcqTk3qL+T6f4yQ6gi8Tv+5mpqovuOlsN6Ao3Zu7e60FUz7WtidZt/ll6SQ==}
+    peerDependencies:
+      react: ^18.3.1
 
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0':
     resolution: {integrity: sha512-b9MIk7yhdS1pMCZM8VeNfUlSKVRhsHZNMl5O9SfaX0l0t5wjdgu4IDzGB8bpnGBBOjGST3rRFVsaaEtI4W6f7g==}
@@ -9571,6 +9579,10 @@ snapshots:
   '@sinonjs/fake-timers@10.3.0':
     dependencies:
       '@sinonjs/commons': 3.0.1
+
+  '@stepperize/react@3.0.1(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
 
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.25.2)':
     dependencies:

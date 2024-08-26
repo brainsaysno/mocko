@@ -26,15 +26,9 @@ function Index() {
       <H1 className="text-center">Mocko</H1>
       <section className="text-center space-y-4">
         <P className="text-center">Generate and export friendly mock data</P>
-        {data && data.length == 0 ? (
-          <Link className={buttonVariants()} to="/mockos/new">
-            Get started
-          </Link>
-        ) : (
-          <Link className={buttonVariants()} to="/mockos">
-            Go to Mockos
-          </Link>
-        )}
+        <Link className={buttonVariants()} to="/mockos">
+          {data && data.length == 0 ? 'Get Started' : 'Go to Mockos'}
+        </Link>
       </section>
     </main>
   );
