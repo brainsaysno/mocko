@@ -23,6 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
+import { cn } from '@/lib/utils';
 
 const prefixes: Record<MockoType, string> = {
   [MockoType.AIStructured]: 'AI Structured',
@@ -31,7 +32,19 @@ const prefixes: Record<MockoType, string> = {
   [MockoType.Fixed]: 'Fixed',
 };
 
-export default function MockoCard({ mocko }: { mocko: Mocko }) {
+type MockoCardProps = {
+  mocko: Mocko;
+  disabled?: boolean;
+  afterGenerate?: () => void;
+  onGenerate?: () => void;
+};
+
+export default function MockoCard({
+  mocko,
+  disabled = false,
+  afterGenerate,
+  onGenerate,
+}: MockoCardProps) {
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
   const [isLoadingCopy, setIsLoadingCopy] = useState(false);
   const [isLoadingEmail, setIsLoadingEmail] = useState(false);
@@ -43,7 +56,8 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
   const [isEmailPopoverOpen, setIsEmailPopoverOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<string | null>(null);
 
-  const onGenerate = useCallback(async () => {
+  const onClickGenerate = useCallback(async () => {
+    onGenerate?.();
     setIsLoadingGenerate(true);
     const mockData = await mocko.generateOne();
 
@@ -53,6 +67,7 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
     setTimeout(() => {
       setIsSuccessGenerate(false);
     }, 1000);
+    afterGenerate?.();
   }, [mocko]);
 
   const sendEmailSchema = z.object({
@@ -65,13 +80,14 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
     resolver: zodResolver(sendEmailSchema),
   });
 
-  const onEmail = useCallback(async () => {
+  const onClickEmail = useCallback(async () => {
     setIsLoadingEmail(true);
     setIsEmailPopoverOpen(true);
   }, [mocko]);
 
   const onSendEmail = useCallback<SubmitHandler<SendEmailSchema>>(
     async ({ recipient }) => {
+      onGenerate?.();
       setIsEmailPopoverOpen(false);
       const mockData = await mocko.generateOne();
       await emailMocko(recipient, mockData);
@@ -80,6 +96,7 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
       setTimeout(() => {
         setIsSuccessEmail(false);
       }, 1000);
+      afterGenerate?.();
     },
     []
   );
@@ -92,7 +109,8 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
     navigator.clipboard.writeText(content);
   };
 
-  const onCopy = useCallback(async () => {
+  const onClickCopy = useCallback(async () => {
+    onGenerate?.();
     setIsLoadingCopy(true);
     const mockData = await mocko.generateOne();
 
@@ -103,6 +121,7 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
     setTimeout(() => {
       setIsSuccessCopy(false);
     }, 1000);
+    afterGenerate?.();
   }, [mocko]);
 
   const onDialogClose = () => {
@@ -126,23 +145,26 @@ export default function MockoCard({ mocko }: { mocko: Mocko }) {
               </div>
               <div className="h-1/3 flex justify-center items-center gap-4 bg-white">
                 <ActionButton
-                  action={onGenerate}
+                  action={onClickGenerate}
                   isLoading={isLoadingGenerate}
                   isSuccess={isSuccessGenerate}
+                  disabled={disabled}
                 >
                   <GenerateIcon />
                 </ActionButton>
                 <ActionButton
-                  action={onCopy}
+                  action={onClickCopy}
                   isLoading={isLoadingCopy}
                   isSuccess={isSuccessCopy}
+                  disabled={disabled}
                 >
                   <CopyIcon />
                 </ActionButton>
                 <ActionButton
-                  action={onEmail}
+                  action={onClickEmail}
                   isLoading={isLoadingEmail}
                   isSuccess={isSuccessEmail}
+                  disabled={disabled}
                 >
                   <EmailIcon />
                 </ActionButton>
@@ -267,15 +289,20 @@ function ActionButton({
   isLoading,
   isSuccess,
   action,
+  disabled,
 }: PropsWithChildren<{
   action: () => void;
   isLoading: boolean;
   isSuccess: boolean;
+  disabled: boolean;
 }>) {
   return (
     <div
-      className="cursor-pointer w-8 h-8 bg-slate-200 rounded-sm flex justify-center items-center border border-black"
-      onClick={action}
+      className={cn(
+        'w-8 h-8 bg-slate-200 rounded-sm flex justify-center items-center border border-black',
+        disabled ? 'cursor-wait' : 'cursor-pointer'
+      )}
+      onClick={disabled ? undefined : action}
       role="button"
     >
       {isLoading ? <Spinner /> : isSuccess ? <CheckIcon /> : children}

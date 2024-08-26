@@ -5,6 +5,7 @@ import useMockos from '@/hooks/useMockos';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import MockoEyesClosed from '../../assets/mocko-eyes-closed.webp';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 export const Route = createLazyFileRoute('/mockos/')({
   component: Mockos,
@@ -12,6 +13,7 @@ export const Route = createLazyFileRoute('/mockos/')({
 
 function Mockos() {
   const { isSuccess, isLoading, data } = useMockos();
+  const [isGenerating, setIsGenerating] = useState(false);
   const navigate = useNavigate();
 
   if (isSuccess && data.length == 0) navigate({ to: '/' });
@@ -28,7 +30,16 @@ function Mockos() {
         </Link>
       </header>
       <section className="flex justify-center gap-6 flex-wrap">
-        {isSuccess ? data.map((m) => <MockoCard mocko={m} />) : null}
+        {isSuccess
+          ? data.map((m) => (
+            <MockoCard
+              mocko={m}
+              disabled={isGenerating}
+              afterGenerate={() => setIsGenerating(false)}
+              onGenerate={() => setIsGenerating(true)}
+            />
+          ))
+          : null}
         {isLoading ? <p>Loading...</p> : null}
       </section>
       <motion.div
