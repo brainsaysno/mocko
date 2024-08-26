@@ -11,7 +11,10 @@ func NewRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
-	router.Use(cors.Default())
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"https://mocko.nrusso.dev"}
+	router.Use(cors.New(corsConfig))
 
 	health := new(controllers.HealthController)
 	router.GET("/health", health.Status)
