@@ -48,7 +48,7 @@ function NewMocko() {
 
 function NewFixedMocko() {
   const newFixedMockoSchema = z.object({
-    name: z.string(),
+    name: z.string().max(15, 'Name must be smaller than 15 chars.'),
     content: z.string(),
   });
 
@@ -63,7 +63,7 @@ function NewFixedMocko() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     await db.mockos.add({ ...data, type: MockoType.Fixed });
     await navigate({
-      to: '/',
+      to: '/mockos',
     });
   };
 

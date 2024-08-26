@@ -1,6 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 import {
   Form,
   FormControl,
@@ -8,23 +8,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Textarea } from "../ui/textarea";
+} from '../ui/form';
+import { Textarea } from '../ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Button } from "../ui/button";
-import { LLMModel, MockoType } from "@/model/mocko";
-import { db } from "@/lib/db";
-import { Input } from "../ui/input";
-import { useNavigate } from "@tanstack/react-router";
+} from '../ui/select';
+import { Button } from '../ui/button';
+import { LLMModel, MockoType } from '@/model/mocko';
+import { db } from '@/lib/db';
+import { Input } from '../ui/input';
+import { useNavigate } from '@tanstack/react-router';
 
 const newFixedMockoSchema = z.object({
-  name: z.string(),
+  name: z.string().max(15, 'Name must be smaller than 18 chars.'),
   prompt: z.string(),
   model: z.nativeEnum(LLMModel),
 });
@@ -44,7 +44,7 @@ export default function NewAIProseMocko() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     await db.mockos.add({ ...data, type: MockoType.AIProse });
     navigate({
-      to: "/",
+      to: '/mockos',
     });
   };
 
