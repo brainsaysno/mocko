@@ -10,6 +10,8 @@ export default function useMockos() {
     queryFn: async () => {
       const mockos = await db.mockos.toArray();
 
+      mockos.reverse();
+
       return mockos.map((m) => Mocko.fromJson(m));
     },
   });
