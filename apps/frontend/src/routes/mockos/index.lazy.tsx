@@ -17,7 +17,7 @@ function Mockos() {
   if (isSuccess && data.length == 0) navigate({ to: '/' });
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden p-12 bg-pattern scroll-m-4">
+    <main className="relative w-screen h-screen overflow-hidden p-12 bg-pattern">
       <header className="mb-8 flex justify-between items-center">
         <H1>My Mockos</H1>
         <Link

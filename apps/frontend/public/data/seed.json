@@ -5,5 +5,19 @@
     "name": "Store Email",
     "prompt": "An email from a store manager to a service provider asking for service on an asset",
     "model": "gpt-4o-mini"
+  },
+  {
+    "id": 1,
+    "type": "ai-prose",
+    "name": "Store Email",
+    "prompt": "An email from a store manager to a service provider asking for service on an asset",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 1,
+    "type": "ai-prose",
+    "name": "Store Email",
+    "prompt": "An email from a store manager to a service provider asking for service on an asset",
+    "model": "gpt-4o-mini"
   }
 ]

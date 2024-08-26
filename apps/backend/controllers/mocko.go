@@ -3,6 +3,7 @@ package controllers
 import (
 	"apps/backend/services/completion"
 	"context"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +39,7 @@ func (m MockoController) GenerateAIProseMocko(c *gin.Context) {
 
 	const model = "gpt-4o-mini"
 
-	resp, _ := completionService.CreateChatCompletion(
+	resp, completionErr := completionService.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
 			Model: model,
@@ -54,6 +55,14 @@ func (m MockoController) GenerateAIProseMocko(c *gin.Context) {
 			},
 		},
 	)
+
+	if completionErr != nil {
+		log.Println(completionErr)
+		c.Err()
+	}
+
+	log.Println(resp)
+	log.Println(resp.Choices)
 
 	c.JSON(http.StatusOK, gin.H{
 		"mock": resp.Choices[0].Message.Content,

@@ -3,21 +3,25 @@ FROM node:lts-alpine as build
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
-WORKDIR /app
+WORKDIR /build
 
 RUN addgroup --system frontend && \
           adduser --system -G frontend frontend
 
 COPY . .
 
-RUN pnpm --prefix frontend --omit=dev -f install
+RUN corepack enable
+
+RUN pnpm frontend -f install
 
 RUN npx nx build frontend
 
 
-FROM build
+FROM caddy
 
-COPY /app/dist/apps/frontend frontend/
-RUN chown -R frontend:frontend .
+COPY --from=build /build/apps/frontend/Caddyfile /etc/caddy/Caddyfile
 
-CMD [ "node", "frontend" ]
+COPY --from=build /build/dist/apps/frontend /srv
+COPY --from=build /build/dist/apps/frontend /var/www/html
+
+RUN caddy fmt --overwrite /etc/caddy/Caddyfile

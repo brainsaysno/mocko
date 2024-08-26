@@ -11,7 +11,6 @@ import { db, dbMockoSchema } from '@/lib/db';
 import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
-import { MockoType } from '@/model/mocko';
 
 export default function MockoDevtools() {
   const queryClient = useQueryClient();

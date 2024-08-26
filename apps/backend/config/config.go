@@ -2,35 +2,19 @@ package config
 
 import (
 	"log"
-	"path/filepath"
 
-	"github.com/spf13/viper"
+	"github.com/knadh/koanf/providers/env"
+	"github.com/knadh/koanf/v2"
 )
 
-var config *viper.Viper
+var config *koanf.Koanf
 
-func Init(env string) {
-	var err error
-
-	config = viper.New()
-	config.SetConfigType("env")
-	config.AddConfigPath(".")
-	config.SetConfigName(env)
-	err = config.ReadInConfig()
-	if err != nil {
-		log.Println(err)
-
-		log.Fatal("error on parsing env configuration file")
-	}
+func Init() {
+	config = koanf.New(".")
+	config.Load(env.Provider("", ".", func(s string) string { return s }), nil)
+	log.Println(config.All())
 }
 
-func relativePath(basedir string, path *string) {
-	p := *path
-	if len(p) > 0 && p[0] != '/' {
-		*path = filepath.Join(basedir, p)
-	}
-}
-
-func GetConfig() *viper.Viper {
+func GetConfig() *koanf.Koanf {
 	return config
 }
