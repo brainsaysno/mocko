@@ -21,7 +21,7 @@ function Index() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <img src={MockoLogo} className="h-full" />
+        <img src={MockoLogo} className="h-full" alt="Mocko Logo" />
       </motion.div>
       <H1 className="text-center">Mocko</H1>
       <section className="text-center space-y-4">

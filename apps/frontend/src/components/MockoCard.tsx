@@ -149,6 +149,7 @@ export default function MockoCard({
                   isLoading={isLoadingGenerate}
                   isSuccess={isSuccessGenerate}
                   disabled={disabled}
+                  label="Generate Mocko"
                 >
                   <GenerateIcon />
                 </ActionButton>
@@ -157,6 +158,7 @@ export default function MockoCard({
                   isLoading={isLoadingCopy}
                   isSuccess={isSuccessCopy}
                   disabled={disabled}
+                  label="Copy Mocko"
                 >
                   <CopyIcon />
                 </ActionButton>
@@ -165,6 +167,7 @@ export default function MockoCard({
                   isLoading={isLoadingEmail}
                   isSuccess={isSuccessEmail}
                   disabled={disabled}
+                  label="Email Mocko"
                 >
                   <EmailIcon />
                 </ActionButton>
@@ -290,11 +293,13 @@ function ActionButton({
   isSuccess,
   action,
   disabled,
+  label,
 }: PropsWithChildren<{
   action: () => void;
   isLoading: boolean;
   isSuccess: boolean;
   disabled: boolean;
+  label: string;
 }>) {
   return (
     <div
@@ -304,6 +309,7 @@ function ActionButton({
       )}
       onClick={disabled ? undefined : action}
       role="button"
+      aria-label={label}
     >
       {isLoading ? <Spinner /> : isSuccess ? <CheckIcon /> : children}
     </div>

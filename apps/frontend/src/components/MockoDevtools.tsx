@@ -34,7 +34,7 @@ export default function MockoDevtools() {
     <Sheet>
       <SheetTrigger className="absolute bottom-8 right-8">
         <div className="bg-slate-400 w-24 rounded-full relative shadow-2xl transition-colors transition-2s duration-300">
-          <img src={MockoLogo} className="p-4" />
+          <img src={MockoLogo} className="p-4" alt="Mocko Devtools Logo" />
           <p
             className="absolute z-10 bottom-2 left-[30%] text-center text-white font-extrabold text-xl"
             style={{ WebkitTextStroke: '1px black' }}
