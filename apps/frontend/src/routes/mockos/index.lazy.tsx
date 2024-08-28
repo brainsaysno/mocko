@@ -85,9 +85,10 @@ function Onboarding() {
         </DialogTitle>
         <div className="space-y-4">
           <p className="md:text-xl whitespace-pre-wrap">
-            Your friendly guide to <b>quick and easy mock data generation</b>.
-            Whether you're building a new app, testing APIs, or just need data
-            fast, I've got you covered. Think of me as your{' '}
+            Your friendly guide to{' '}
+            <b>quick and reliable mock data generation</b>. Whether you're
+            building a new app, testing APIs, or just need data fast, I've got
+            you covered. Think of me as your{' '}
             <b>trusty sidekick in manual testing</b>—I'll help you generate and
             export <b>consistent, user-friendly mock data</b> in a snap. Ready
             to explore? Let me give you a quick tour of the app!

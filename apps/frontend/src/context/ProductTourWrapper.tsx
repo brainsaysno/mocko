@@ -10,13 +10,13 @@ const tourSteps: Step[] = [
   {
     target: '#tour-new-mocko-button',
     content: (
-      <>
-        <h3 className="text-xl font-semibold mb-1">1 of 6</h3>
+      <div className="space-y-1">
+        <h3 className="text-xl font-semibold">1 of 6</h3>
         <p>
-          Here you can create a new mocko—your mock data generator. Go ahead and
-          take a look!
+          Here you can create a new <b>Mocko</b>—your mock data generator 🚀
         </p>
-      </>
+        <p>Go ahead and take a look!</p>
+      </div>
     ),
     data: {
       next: '/mockos/new',
@@ -26,13 +26,13 @@ const tourSteps: Step[] = [
   {
     target: '#tour-mocko-type-tabs',
     content: (
-      <>
-        <h3 className="text-xl font-semibold mb-1">2 of 6</h3>
+      <div className="space-y-1">
+        <h3 className="text-xl font-semibold">2 of 6</h3>
         <p>
-          First, choose how you'd like to generate your data. Select the option
-          that fits your project best!
+          First, choose <b>HOW</b> you'd like to generate your data.
         </p>
-      </>
+        <p>Select the option that fits your project best!</p>
+      </div>
     ),
     data: {
       previous: '/mockos',
@@ -42,24 +42,25 @@ const tourSteps: Step[] = [
   {
     target: '#tour-mocko-form',
     content: (
-      <>
-        <h3 className="text-xl font-semibold mb-1">3 of 6</h3>
+      <div className="space-y-1">
+        <h3 className="text-xl font-semibold">3 of 6</h3>
         <p>
-          Now it's time to fill out the details for your mocko. Provide the
-          necessary information to tailor your mock data just the way you need
-          it.
+          Now it's time to <b>TAILOR</b> your Mocko to just the way you need it.
         </p>
-      </>
+        <p>Just answer the questions, you'll be fine...</p>
+      </div>
     ),
     data: {},
   },
   {
     target: '#tour-mocko-save',
     content: (
-      <>
-        <h3 className="text-xl font-semibold mb-1">4 of 6</h3>
-        <p>Next, save your mocko and bring your data to life!</p>
-      </>
+      <div className="space-y-1">
+        <h3 className="text-xl font-semibold">4 of 6</h3>
+        <p>
+          Finally, <b>SAVE</b> your Mocko and bring your data to life!
+        </p>
+      </div>
     ),
     data: {
       next: '/mockos',
@@ -68,13 +69,13 @@ const tourSteps: Step[] = [
   {
     target: '.mocko-card:nth-of-type(1)',
     content: (
-      <>
-        <h3 className="text-xl font-semibold mb-1">5 of 6</h3>
+      <div className="space-y-1">
+        <h3 className="text-xl font-semibold">5 of 6</h3>
         <p>
-          Next, I've already created a mocko for you to test out. Give it a try
-          here!
+          I've already created a Mocko for you to test out.{' '}
+          <b>Give it a try here!</b>
         </p>
-      </>
+      </div>
     ),
     data: {
       previous: '/mockos/new',
@@ -83,13 +84,16 @@ const tourSteps: Step[] = [
   {
     target: '.mocko-card:nth-of-type(1) #tour-export-buttons',
     content: (
-      <>
-        <h3 className="text-xl font-semibold mb-1">6 of 6</h3>
+      <div className="space-y-1">
+        <h3 className="text-xl font-semibold">6 of 6</h3>
         <p>
-          These are your export buttons. You can generate the data to preview
-          it, copy it directly, or send it via email.
+          These are your <b>export buttons</b>.
         </p>
-      </>
+        <p>
+          You can generate the data to preview it, copy it directly, or send it
+          via email... <i>Have fun!</i>
+        </p>
+      </div>
     ),
     data: {},
   },
