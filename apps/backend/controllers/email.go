@@ -19,10 +19,10 @@ type EmailBody struct {
 func (e EmailController) SendEmail(c *gin.Context) {
 	conf := config.GetConfig()
 
-	emailFrom := conf.Get("email_from").(string)
-	emailPassword := conf.Get("email_password").(string)
-	emailServer := conf.Get("email_server").(string)
-	emailPort := conf.Get("email_port").(string)
+	emailFrom := conf.Get("EMAIL_FROM").(string)
+	emailPassword := conf.Get("EMAIL_PASSWORD").(string)
+	emailServer := conf.Get("EMAIL_SERVER").(string)
+	emailPort := conf.Get("EMAIL_PORT").(string)
 
 	var requestBody EmailBody
 

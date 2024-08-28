@@ -1,4 +1,6 @@
 import MockoDevtools from '@/components/MockoDevtools';
+import { ProductTourContextProvider } from '@/context/ProductTourContext';
+import ProductTourWrapper from '@/context/ProductTourWrapper';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import React from 'react';
 
@@ -16,10 +18,12 @@ const TanStackRouterDevtools =
 
 export const Route = createRootRoute({
   component: () => (
-    <>
-      <Outlet />
-      <TanStackRouterDevtools />
-      <MockoDevtools />
-    </>
+    <ProductTourContextProvider>
+      <ProductTourWrapper>
+        <Outlet />
+        <TanStackRouterDevtools />
+        <MockoDevtools />
+      </ProductTourWrapper>
+    </ProductTourContextProvider>
   ),
 });

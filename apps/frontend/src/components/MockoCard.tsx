@@ -131,69 +131,74 @@ export default function MockoCard({
   return (
     <Dialog open={!!dialogContent} onOpenChange={(o) => o || onDialogClose()}>
       <DialogTrigger asChild>
-        <Popover
-          open={isEmailPopoverOpen}
-          onOpenChange={(o) => o || onEmailClose()}
-        >
-          <PopoverTrigger asChild>
-            <div className="w-72 h-40 rounded-md overflow-clip border-2 border-black">
-              <div className="h-2/3 bg-slate-100 flex justify-center items-center border-b-2 border-black">
-                <div>
-                  <p>{prefixes[mocko.type]}</p>
-                  <h4 className="text-3xl font-medium">{mocko.name}</h4>
+        <div>
+          <Popover
+            open={isEmailPopoverOpen}
+            onOpenChange={(o) => o || onEmailClose()}
+          >
+            <PopoverTrigger asChild>
+              <div className="w-72 h-40 rounded-md overflow-clip border-2 border-black mocko-card">
+                <div className="h-2/3 bg-slate-100 flex justify-center items-center border-b-2 border-black">
+                  <div>
+                    <p>{prefixes[mocko.type]}</p>
+                    <h4 className="text-3xl font-medium">{mocko.name}</h4>
+                  </div>
+                </div>
+                <div
+                  className="h-1/3 flex justify-center items-center gap-4 bg-white"
+                  id="tour-export-buttons"
+                >
+                  <ActionButton
+                    action={onClickGenerate}
+                    isLoading={isLoadingGenerate}
+                    isSuccess={isSuccessGenerate}
+                    disabled={disabled}
+                    label="Generate Mocko"
+                  >
+                    <GenerateIcon />
+                  </ActionButton>
+                  <ActionButton
+                    action={onClickCopy}
+                    isLoading={isLoadingCopy}
+                    isSuccess={isSuccessCopy}
+                    disabled={disabled}
+                    label="Copy Mocko"
+                  >
+                    <CopyIcon />
+                  </ActionButton>
+                  <ActionButton
+                    action={onClickEmail}
+                    isLoading={isLoadingEmail}
+                    isSuccess={isSuccessEmail}
+                    disabled={disabled}
+                    label="Email Mocko"
+                  >
+                    <EmailIcon />
+                  </ActionButton>
                 </div>
               </div>
-              <div className="h-1/3 flex justify-center items-center gap-4 bg-white">
-                <ActionButton
-                  action={onClickGenerate}
-                  isLoading={isLoadingGenerate}
-                  isSuccess={isSuccessGenerate}
-                  disabled={disabled}
-                  label="Generate Mocko"
-                >
-                  <GenerateIcon />
-                </ActionButton>
-                <ActionButton
-                  action={onClickCopy}
-                  isLoading={isLoadingCopy}
-                  isSuccess={isSuccessCopy}
-                  disabled={disabled}
-                  label="Copy Mocko"
-                >
-                  <CopyIcon />
-                </ActionButton>
-                <ActionButton
-                  action={onClickEmail}
-                  isLoading={isLoadingEmail}
-                  isSuccess={isSuccessEmail}
-                  disabled={disabled}
-                  label="Email Mocko"
-                >
-                  <EmailIcon />
-                </ActionButton>
-              </div>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="box-shadow-xl w-full mx-auto">
-            <Form {...emailForm}>
-              <form onSubmit={emailForm.handleSubmit(onSendEmail)}>
-                <FormField
-                  control={emailForm.control}
-                  name="recipient"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Recipient</FormLabel>
-                      <FormControl>
-                        <Input placeholder="example@email.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
-          </PopoverContent>
-        </Popover>
+            </PopoverTrigger>
+            <PopoverContent className="box-shadow-xl w-full mx-auto">
+              <Form {...emailForm}>
+                <form onSubmit={emailForm.handleSubmit(onSendEmail)}>
+                  <FormField
+                    control={emailForm.control}
+                    name="recipient"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Recipient</FormLabel>
+                        <FormControl>
+                          <Input placeholder="example@email.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </form>
+              </Form>
+            </PopoverContent>
+          </Popover>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

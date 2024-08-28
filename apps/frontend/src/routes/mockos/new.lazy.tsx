@@ -27,7 +27,10 @@ function NewMocko() {
   return (
     <main className="w-screen h-screen overflow-hidden p-12 bg-pattern">
       <Tabs defaultValue="ai" className="flex flex-col justify-center">
-        <TabsList className="md:w-1/2 grid w-full grid-cols-3 mx-auto">
+        <TabsList
+          className="md:w-1/2 grid w-full grid-cols-3 mx-auto"
+          id="tour-mocko-type-tabs"
+        >
           <TabsTrigger value="ai">AI</TabsTrigger>
           <TabsTrigger value="deterministic">Deterministic</TabsTrigger>
           <TabsTrigger value="fixed">Fixed</TabsTrigger>
@@ -110,7 +113,7 @@ function NewFixedMocko() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Save</Button>
       </form>
     </Form>
   );

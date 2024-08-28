@@ -11,9 +11,12 @@ import { db, dbMockoSchema } from '@/lib/db';
 import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
+import useIsOnboarded from '@/hooks/useIsOnboarded';
 
 export default function MockoDevtools() {
   const queryClient = useQueryClient();
+
+  const { setIsOnboarded } = useIsOnboarded();
 
   const deleteAllMockos = async () => {
     await db.mockos.clear();
@@ -47,6 +50,9 @@ export default function MockoDevtools() {
         <SheetHeader>
           <SheetTitle>Mockos</SheetTitle>
           <SheetDescription className="flex flex-col gap-2">
+            <Button onClick={() => setIsOnboarded(false)} variant="outline">
+              Trigger Onboarding
+            </Button>
             <Button onClick={seedMockos} variant="outline">
               Seed
             </Button>

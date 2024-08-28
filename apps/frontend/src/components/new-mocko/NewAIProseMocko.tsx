@@ -51,6 +51,7 @@ export default function NewAIProseMocko() {
   return (
     <Form {...form}>
       <form
+        id="tour-mocko-form"
         onSubmit={form.handleSubmit(onSubmit)}
         className="md:w-2/3 space-y-6 mx-auto"
       >
@@ -101,7 +102,9 @@ export default function NewAIProseMocko() {
                   </SelectTrigger>
                   <SelectContent>
                     {Object.values(LLMModel).map((m) => (
-                      <SelectItem value={m}>{m}</SelectItem>
+                      <SelectItem value={m} key={m}>
+                        {m}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -110,7 +113,9 @@ export default function NewAIProseMocko() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" id="tour-mocko-save">
+          Save
+        </Button>
       </form>
     </Form>
   );

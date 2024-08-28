@@ -11,15 +11,30 @@ export const dbMockoSchema = z.object({
   model: z.nativeEnum(LLMModel).optional(),
 });
 
-type Mocko = z.infer<typeof dbMockoSchema>;
+type DatabaseMocko = z.infer<typeof dbMockoSchema>;
 
-const db = new Dexie('MockoDatabase') as Dexie & {
-  mockos: EntityTable<Mocko, 'id'>;
+export const MOCKO_DB_NAME = 'MockoDatabase';
+
+const db = new Dexie(MOCKO_DB_NAME) as Dexie & {
+  mockos: EntityTable<DatabaseMocko, 'id'>;
 };
+
+const initialMocko = {
+  id: 1,
+  type: 'ai-prose',
+  name: 'Store Email',
+  prompt:
+    'An email from a store manager to a service provider asking for service on an asset',
+  model: 'gpt-4o-mini',
+};
+
+db.on('populate', (tx) => {
+  tx.table('mockos').add(initialMocko);
+});
 
 db.version(1).stores({
   mockos: '++id, type, name, prompt, content, model',
 });
 
-export type { Mocko };
+export type { DatabaseMocko };
 export { db };
