@@ -19,7 +19,7 @@ function Mockos() {
   const { isSuccess, isLoading, data } = useMockos();
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const { isOnboarded, setIsOnboarded } = useIsOnboarded();
+  const { isOnboarded } = useIsOnboarded();
 
   return (
     <main className="relative w-screen h-screen overflow-hidden p-12 bg-pattern">
@@ -37,14 +37,14 @@ function Mockos() {
         {!isOnboarded && <Onboarding />}
         {isSuccess
           ? data.map((m) => (
-            <MockoCard
-              key={m.id}
-              mocko={m}
-              disabled={isGenerating}
-              afterGenerate={() => setIsGenerating(false)}
-              onGenerate={() => setIsGenerating(true)}
-            />
-          ))
+              <MockoCard
+                key={m.id}
+                mocko={m}
+                disabled={isGenerating}
+                afterGenerate={() => setIsGenerating(false)}
+                onGenerate={() => setIsGenerating(true)}
+              />
+            ))
           : null}
         {isLoading ? <p>Loading...</p> : null}
       </section>

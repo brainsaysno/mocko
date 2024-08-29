@@ -8,6 +8,12 @@ export enum MockoType {
   Fixed = 'fixed',
 }
 
+export type MockoExportOptions = {
+  runtimeValues: Map<string, string>;
+};
+
+export const VARIABLE_REGEX = /{{\s?(\w+)\s?}}/g;
+
 export abstract class Mocko {
   id: number;
   type: MockoType;
@@ -23,11 +29,10 @@ export abstract class Mocko {
     this.runtimeVariables = this.getRuntimeVariables();
   }
 
-  abstract generateOne(): Promise<string>;
+  abstract generateOne(options?: MockoExportOptions): Promise<string>;
 
   private getRuntimeVariables(): string[] {
-    const variableRegex = /{{\s?(\w+)\s?}}/g;
-    const matches = this.content.matchAll(variableRegex);
+    const matches = this.content.matchAll(VARIABLE_REGEX);
 
     return Array.from(matches)
       .map((m) => m.at(1))
@@ -97,11 +102,13 @@ export class FixedMocko extends Mocko {
     return new FixedMocko(dto.id, dto.name, dto.content);
   }
 
-  async generateOne() {
-    const variableRegex = /{{\s?(\w+)\s?}}/;
-
-    return this.content.replace(variableRegex, (_, identifier) => {
-      return 'VAR_' + identifier;
+  private interpolateVariables(runtimeValues: Map<string, string>) {
+    return this.content.replace(VARIABLE_REGEX, (_, identifier) => {
+      return runtimeValues.get(identifier) ?? `[${identifier}]`;
     });
+  }
+
+  async generateOne(options: MockoExportOptions) {
+    return this.interpolateVariables(options.runtimeValues);
   }
 }

@@ -1,5 +1,5 @@
 import { emailMocko } from '@/lib/api';
-import { Mocko, MockoType } from '@/model/mocko';
+import { Mocko, MockoExportOptions, MockoType } from '@/model/mocko';
 import { PropsWithChildren, useCallback, useRef, useState } from 'react';
 import { Popover, PopoverContent } from './ui/popover';
 import { Input } from './ui/input';
@@ -24,6 +24,7 @@ import {
   DialogTrigger,
 } from './ui/dialog';
 import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
 
 const prefixes: Record<MockoType, string> = {
   [MockoType.AIStructured]: 'AI Structured',
@@ -72,14 +73,15 @@ export default function MockoCard({
   );
 
   const onExportClick = useCallback(
-    async (action: ExportAction) => {
-      setExportAction(action);
-      if (action == ExportAction.Email && !recipientRef.current)
+    async (action?: ExportAction) => {
+      if (action) setExportAction(action);
+      if (action == ExportAction.Email && !recipientRef.current) {
         return setIsEmailPopoverOpen(true);
+      }
 
       if (mocko.runtimeVariables.length > 0)
         setIsInputingRuntimeVariables(true);
-      else exportMocko(action);
+      else exportMocko(action ?? exportAction);
     },
     [mocko]
   );
@@ -106,10 +108,13 @@ export default function MockoCard({
     navigator.clipboard.writeText(content);
   };
 
-  const exportMocko = async (action: ExportAction) => {
+  const exportMocko = async (
+    action: ExportAction,
+    options?: MockoExportOptions
+  ) => {
     onGenerate?.();
     setExportStatus(ExportStatus.Loading);
-    const mockData = await mocko.generateOne();
+    const mockData = await mocko.generateOne(options);
     exportActionCallbacks[action](mockData);
     setExportStatus(ExportStatus.Success);
     setTimeout(() => {
@@ -138,9 +143,18 @@ export default function MockoCard({
     setIsInputingRuntimeVariables(false);
   };
 
-  const form = useForm<Record<string, string>>();
+  const runtimeVariablesForm = useForm<Record<string, string>>();
 
-  const onRuntimeVariablesSubmit = async (data: Record<string, string>) => {};
+  const onRuntimeVariablesSubmit = async (
+    runtimeValuesObject: Record<string, string>
+  ) => {
+    setIsInputingRuntimeVariables(false);
+    const runtimeValues = new Map();
+    Object.entries(runtimeValuesObject).map(([k, v]) =>
+      runtimeValues.set(k, v)
+    );
+    exportMocko(exportAction, { runtimeValues });
+  };
 
   return (
     <Dialog
@@ -205,15 +219,17 @@ export default function MockoCard({
             </DialogTitle>
           </DialogHeader>
           <div>
-            <Form {...form}>
+            <Form {...runtimeVariablesForm}>
               <form
                 id="tour-mocko-form"
-                onSubmit={form.handleSubmit(onRuntimeVariablesSubmit)}
+                onSubmit={runtimeVariablesForm.handleSubmit(
+                  onRuntimeVariablesSubmit
+                )}
                 className="md:w-2/3 space-y-6 mx-auto"
               >
                 {mocko.runtimeVariables.map((v) => (
                   <FormField
-                    control={form.control}
+                    control={runtimeVariablesForm.control}
                     name={v}
                     render={({ field }) => (
                       <FormItem>
@@ -226,6 +242,7 @@ export default function MockoCard({
                     )}
                   />
                 ))}
+                <Button>Generate</Button>
               </form>
             </Form>
           </div>
@@ -235,10 +252,7 @@ export default function MockoCard({
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <span>{mocko.name}</span>{' '}
-              <span
-                className=""
-                onClick={() => copyContent(dialogContent ?? '')}
-              >
+              <span onClick={() => copyContent(dialogContent ?? '')}>
                 <CopyIcon />
               </span>
             </DialogTitle>
