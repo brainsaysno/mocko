@@ -1,4 +1,4 @@
-import { generateAIProseMocko } from '@/lib/api';
+import { API_BASE_URL, generateAIProseMocko } from '@/lib/api';
 import { z } from 'zod';
 
 export enum MockoType {
@@ -29,7 +29,11 @@ export abstract class Mocko {
     this.runtimeVariables = this.getRuntimeVariables();
   }
 
-  abstract generateOne(options?: MockoExportOptions): Promise<string>;
+  protected interpolateVariables(runtimeValues: Map<string, string>) {
+    return this.content.replace(VARIABLE_REGEX, (_, identifier) => {
+      return runtimeValues.get(identifier) ?? `[${identifier}]`;
+    });
+  }
 
   private getRuntimeVariables(): string[] {
     const matches = this.content.matchAll(VARIABLE_REGEX);
@@ -38,6 +42,8 @@ export abstract class Mocko {
       .map((m) => m.at(1))
       .filter((m) => m != undefined);
   }
+
+  abstract generateOne(options?: MockoExportOptions): Promise<string>;
 
   static fromJson(json: any): Mocko {
     switch (json.type) {
@@ -79,8 +85,24 @@ export class AIProseMocko extends Mocko {
     return new AIProseMocko(dto.id, dto.name, dto.content, dto.model);
   }
 
-  async generateOne() {
-    return generateAIProseMocko(this.content);
+  async generateOne(options: MockoExportOptions) {
+    const prompt = this.interpolateVariables(options.runtimeValues);
+
+    const generateMockoResponseSchema = z.object({
+      mock: z.string(),
+    });
+
+    const res = await fetch(API_BASE_URL + '/mocko/ai/prose', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    }).then((r) => r.json());
+
+    const { mock } = generateMockoResponseSchema.parse(res);
+
+    return mock;
   }
 }
 
@@ -100,12 +122,6 @@ export class FixedMocko extends Mocko {
     const dto = schema.parse(json);
 
     return new FixedMocko(dto.id, dto.name, dto.content);
-  }
-
-  private interpolateVariables(runtimeValues: Map<string, string>) {
-    return this.content.replace(VARIABLE_REGEX, (_, identifier) => {
-      return runtimeValues.get(identifier) ?? `[${identifier}]`;
-    });
   }
 
   async generateOne(options: MockoExportOptions) {

@@ -25,7 +25,7 @@ import { useNavigate } from '@tanstack/react-router';
 
 const newFixedMockoSchema = z.object({
   name: z.string().max(15, 'Name must be smaller than 18 chars.'),
-  prompt: z.string(),
+  content: z.string(),
   model: z.nativeEnum(LLMModel),
 });
 
@@ -71,7 +71,7 @@ export default function NewAIProseMocko() {
 
         <FormField
           control={form.control}
-          name="prompt"
+          name="content"
           render={({ field }) => (
             <FormItem>
               <FormLabel>What do you want to mock?</FormLabel>
