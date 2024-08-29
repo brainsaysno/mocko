@@ -12,14 +12,27 @@ export abstract class Mocko {
   id: number;
   type: MockoType;
   name: string;
+  content: string;
+  runtimeVariables: string[];
 
-  constructor(id: number, type: MockoType, name: string) {
+  constructor(id: number, type: MockoType, name: string, content: string) {
     this.id = id;
     this.type = type;
     this.name = name;
+    this.content = content;
+    this.runtimeVariables = this.getRuntimeVariables();
   }
 
   abstract generateOne(): Promise<string>;
+
+  private getRuntimeVariables(): string[] {
+    const variableRegex = /{{\s?(\w+)\s?}}/g;
+    const matches = this.content.matchAll(variableRegex);
+
+    return Array.from(matches)
+      .map((m) => m.at(1))
+      .filter((m) => m != undefined);
+  }
 
   static fromJson(json: any): Mocko {
     switch (json.type) {
@@ -41,12 +54,10 @@ export enum LLMModel {
 }
 
 export class AIProseMocko extends Mocko {
-  prompt: string;
   model: LLMModel;
 
   constructor(id: number, name: string, prompt: string, model: LLMModel) {
-    super(id, MockoType.AIProse, name);
-    this.prompt = prompt;
+    super(id, MockoType.AIProse, name, prompt);
     this.model = model;
   }
 
@@ -54,25 +65,23 @@ export class AIProseMocko extends Mocko {
     const schema = z.object({
       id: z.number(),
       name: z.string(),
-      prompt: z.string(),
+      content: z.string(),
       model: z.nativeEnum(LLMModel),
     });
 
     const dto = schema.parse(json);
 
-    return new AIProseMocko(dto.id, dto.name, dto.prompt, dto.model);
+    return new AIProseMocko(dto.id, dto.name, dto.content, dto.model);
   }
 
   async generateOne() {
-    return generateAIProseMocko(this.prompt);
+    return generateAIProseMocko(this.content);
   }
 }
 
 export class FixedMocko extends Mocko {
-  content: string;
-
   constructor(id: number, name: string, content: string) {
-    super(id, MockoType.Fixed, name);
+    super(id, MockoType.Fixed, name, content);
     this.content = content;
   }
 

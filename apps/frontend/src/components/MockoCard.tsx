@@ -1,6 +1,6 @@
 import { emailMocko } from '@/lib/api';
 import { Mocko, MockoType } from '@/model/mocko';
-import { PropsWithChildren, useCallback, useState } from 'react';
+import { PropsWithChildren, useCallback, useRef, useState } from 'react';
 import { Popover, PopoverContent } from './ui/popover';
 import { Input } from './ui/input';
 import { PopoverTrigger } from '@radix-ui/react-popover';
@@ -14,7 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from './ui/form';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   Dialog,
   DialogContent,
@@ -39,36 +39,84 @@ type MockoCardProps = {
   onGenerate?: () => void;
 };
 
+enum ExportAction {
+  Generate = 'generate',
+  Copy = 'copy',
+  Email = 'email',
+}
+
+enum ExportStatus {
+  Inactive = 'inactive',
+  Loading = 'loading',
+  Success = 'success',
+}
+
 export default function MockoCard({
   mocko,
   disabled = false,
   afterGenerate,
   onGenerate,
 }: MockoCardProps) {
-  const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
-  const [isLoadingCopy, setIsLoadingCopy] = useState(false);
-  const [isLoadingEmail, setIsLoadingEmail] = useState(false);
+  const [exportAction, setExportAction] = useState(ExportAction.Generate);
 
-  const [isSuccessGenerate, setIsSuccessGenerate] = useState(false);
-  const [isSuccessCopy, setIsSuccessCopy] = useState(false);
-  const [isSuccessEmail, setIsSuccessEmail] = useState(false);
+  const recipientRef = useRef<string>();
 
   const [isEmailPopoverOpen, setIsEmailPopoverOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<string | null>(null);
 
-  const onClickGenerate = useCallback(async () => {
-    onGenerate?.();
-    setIsLoadingGenerate(true);
-    const mockData = await mocko.generateOne();
+  const [isInputingRuntimeVariables, setIsInputingRuntimeVariables] =
+    useState(false);
 
-    setDialogContent(mockData);
-    setIsLoadingGenerate(false);
-    setIsSuccessGenerate(true);
+  const [exportStatus, setExportStatus] = useState<ExportStatus>(
+    ExportStatus.Inactive
+  );
+
+  const onExportClick = useCallback(
+    async (action: ExportAction) => {
+      setExportAction(action);
+      if (action == ExportAction.Email && !recipientRef.current)
+        return setIsEmailPopoverOpen(true);
+
+      if (mocko.runtimeVariables.length > 0)
+        setIsInputingRuntimeVariables(true);
+      else exportMocko(action);
+    },
+    [mocko]
+  );
+
+  const exportActionCallbacks: Record<
+    ExportAction,
+    (mockData: string) => void
+  > = {
+    [ExportAction.Generate]: (m) => {
+      setDialogContent(m);
+    },
+    [ExportAction.Copy]: (m) => {
+      copyContent(m);
+    },
+    [ExportAction.Email]: (m) => {
+      if (recipientRef.current) {
+        emailMocko(recipientRef.current, m);
+        recipientRef.current = undefined;
+      }
+    },
+  };
+
+  const copyContent = (content: string) => {
+    navigator.clipboard.writeText(content);
+  };
+
+  const exportMocko = async (action: ExportAction) => {
+    onGenerate?.();
+    setExportStatus(ExportStatus.Loading);
+    const mockData = await mocko.generateOne();
+    exportActionCallbacks[action](mockData);
+    setExportStatus(ExportStatus.Success);
     setTimeout(() => {
-      setIsSuccessGenerate(false);
+      setExportStatus(ExportStatus.Inactive);
     }, 1000);
     afterGenerate?.();
-  }, [mocko]);
+  };
 
   const sendEmailSchema = z.object({
     recipient: z.string().email(),
@@ -80,56 +128,25 @@ export default function MockoCard({
     resolver: zodResolver(sendEmailSchema),
   });
 
-  const onClickEmail = useCallback(async () => {
-    setIsLoadingEmail(true);
-    setIsEmailPopoverOpen(true);
-  }, [mocko]);
-
-  const onSendEmail = useCallback<SubmitHandler<SendEmailSchema>>(
-    async ({ recipient }) => {
-      onGenerate?.();
-      setIsEmailPopoverOpen(false);
-      const mockData = await mocko.generateOne();
-      await emailMocko(recipient, mockData);
-      setIsLoadingEmail(false);
-      setIsSuccessEmail(true);
-      setTimeout(() => {
-        setIsSuccessEmail(false);
-      }, 1000);
-      afterGenerate?.();
-    },
-    []
-  );
-
   const onEmailClose = useCallback(() => {
-    setIsLoadingEmail(false);
+    setExportStatus(ExportStatus.Inactive);
     setIsEmailPopoverOpen(false);
   }, []);
-  const copyContent = (content: string) => {
-    navigator.clipboard.writeText(content);
-  };
-
-  const onClickCopy = useCallback(async () => {
-    onGenerate?.();
-    setIsLoadingCopy(true);
-    const mockData = await mocko.generateOne();
-
-    copyContent(mockData);
-
-    setIsLoadingCopy(false);
-    setIsSuccessCopy(true);
-    setTimeout(() => {
-      setIsSuccessCopy(false);
-    }, 1000);
-    afterGenerate?.();
-  }, [mocko]);
 
   const onDialogClose = () => {
     setDialogContent(null);
+    setIsInputingRuntimeVariables(false);
   };
 
+  const form = useForm<Record<string, string>>();
+
+  const onRuntimeVariablesSubmit = async (data: Record<string, string>) => {};
+
   return (
-    <Dialog open={!!dialogContent} onOpenChange={(o) => o || onDialogClose()}>
+    <Dialog
+      open={!!dialogContent || isInputingRuntimeVariables}
+      onOpenChange={(o) => o || onDialogClose()}
+    >
       <DialogTrigger asChild>
         <div>
           <Popover
@@ -144,43 +161,23 @@ export default function MockoCard({
                     <h4 className="text-3xl font-medium">{mocko.name}</h4>
                   </div>
                 </div>
-                <div
-                  className="h-1/3 flex justify-center items-center gap-4 bg-white"
-                  id="tour-export-buttons"
-                >
-                  <ActionButton
-                    action={onClickGenerate}
-                    isLoading={isLoadingGenerate}
-                    isSuccess={isSuccessGenerate}
-                    disabled={disabled}
-                    label="Generate Mocko"
-                  >
-                    <GenerateIcon />
-                  </ActionButton>
-                  <ActionButton
-                    action={onClickCopy}
-                    isLoading={isLoadingCopy}
-                    isSuccess={isSuccessCopy}
-                    disabled={disabled}
-                    label="Copy Mocko"
-                  >
-                    <CopyIcon />
-                  </ActionButton>
-                  <ActionButton
-                    action={onClickEmail}
-                    isLoading={isLoadingEmail}
-                    isSuccess={isSuccessEmail}
-                    disabled={disabled}
-                    label="Email Mocko"
-                  >
-                    <EmailIcon />
-                  </ActionButton>
-                </div>
+                <ExportButtons
+                  onExport={onExportClick}
+                  status={exportStatus}
+                  activeAction={exportAction}
+                  disabled={disabled}
+                />
               </div>
             </PopoverTrigger>
             <PopoverContent className="box-shadow-xl w-full mx-auto">
               <Form {...emailForm}>
-                <form onSubmit={emailForm.handleSubmit(onSendEmail)}>
+                <form
+                  onSubmit={emailForm.handleSubmit(({ recipient }) => {
+                    recipientRef.current = recipient;
+                    setIsEmailPopoverOpen(false);
+                    onExportClick(ExportAction.Email);
+                  })}
+                >
                   <FormField
                     control={emailForm.control}
                     name="recipient"
@@ -200,20 +197,108 @@ export default function MockoCard({
           </Popover>
         </div>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <span>{mocko.name}</span>{' '}
-            <span className="" onClick={() => copyContent(dialogContent ?? '')}>
-              <CopyIcon />
-            </span>
-          </DialogTitle>
-          <DialogDescription className="whitespace-pre-wrap break-words">
-            {dialogContent}
-          </DialogDescription>
-        </DialogHeader>
-      </DialogContent>
+      {isInputingRuntimeVariables ? (
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              Variables for {mocko.name}:
+            </DialogTitle>
+          </DialogHeader>
+          <div>
+            <Form {...form}>
+              <form
+                id="tour-mocko-form"
+                onSubmit={form.handleSubmit(onRuntimeVariablesSubmit)}
+                className="md:w-2/3 space-y-6 mx-auto"
+              >
+                {mocko.runtimeVariables.map((v) => (
+                  <FormField
+                    control={form.control}
+                    name={v}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{v}</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+              </form>
+            </Form>
+          </div>
+        </DialogContent>
+      ) : (
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <span>{mocko.name}</span>{' '}
+              <span
+                className=""
+                onClick={() => copyContent(dialogContent ?? '')}
+              >
+                <CopyIcon />
+              </span>
+            </DialogTitle>
+            <DialogDescription className="whitespace-pre-wrap break-words">
+              {dialogContent}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      )}
     </Dialog>
+  );
+}
+
+function ExportButtons({
+  onExport,
+  activeAction,
+  status,
+  disabled,
+}: {
+  onExport: (action: ExportAction) => void;
+  activeAction: ExportAction;
+  status: ExportStatus;
+  disabled: boolean;
+}) {
+  return (
+    <div
+      className="h-1/3 flex justify-center items-center gap-4 bg-white"
+      id="tour-export-buttons"
+    >
+      <ActionButton
+        action={() => onExport(ExportAction.Generate)}
+        exportStatus={
+          activeAction == ExportAction.Generate ? status : ExportStatus.Inactive
+        }
+        disabled={disabled}
+        label="Generate Mocko"
+      >
+        <GenerateIcon />
+      </ActionButton>
+      <ActionButton
+        action={() => onExport(ExportAction.Copy)}
+        exportStatus={
+          activeAction == ExportAction.Copy ? status : ExportStatus.Inactive
+        }
+        disabled={disabled}
+        label="Copy Mocko"
+      >
+        <CopyIcon />
+      </ActionButton>
+      <ActionButton
+        action={() => onExport(ExportAction.Email)}
+        exportStatus={
+          activeAction == ExportAction.Email ? status : ExportStatus.Inactive
+        }
+        disabled={disabled}
+        label="Email Mocko"
+      >
+        <EmailIcon />
+      </ActionButton>
+    </div>
   );
 }
 
@@ -294,15 +379,13 @@ function CheckIcon() {
 
 function ActionButton({
   children,
-  isLoading,
-  isSuccess,
+  exportStatus,
   action,
   disabled,
   label,
 }: PropsWithChildren<{
   action: () => void;
-  isLoading: boolean;
-  isSuccess: boolean;
+  exportStatus: ExportStatus;
   disabled: boolean;
   label: string;
 }>) {
@@ -316,7 +399,9 @@ function ActionButton({
       role="button"
       aria-label={label}
     >
-      {isLoading ? <Spinner /> : isSuccess ? <CheckIcon /> : children}
+      {exportStatus == ExportStatus.Loading && <Spinner />}
+      {exportStatus == ExportStatus.Success && <CheckIcon />}
+      {exportStatus == ExportStatus.Inactive && children}
     </div>
   );
 }

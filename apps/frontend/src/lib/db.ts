@@ -6,8 +6,7 @@ export const dbMockoSchema = z.object({
   id: z.number(),
   type: z.nativeEnum(MockoType),
   name: z.string(),
-  prompt: z.string().optional(),
-  content: z.string().optional(),
+  content: z.string(),
   model: z.nativeEnum(LLMModel).optional(),
 });
 
@@ -23,7 +22,7 @@ const initialMocko = {
   id: 1,
   type: 'ai-prose',
   name: 'Store Email',
-  prompt:
+  content:
     'An email from a store manager to a service provider asking for service on an asset',
   model: 'gpt-4o-mini',
 };
@@ -32,8 +31,8 @@ db.on('populate', (tx) => {
   tx.table('mockos').add(initialMocko);
 });
 
-db.version(1).stores({
-  mockos: '++id, type, name, prompt, content, model',
+db.version(2).stores({
+  mockos: '++id, type, name, content, model',
 });
 
 export type { DatabaseMocko };
