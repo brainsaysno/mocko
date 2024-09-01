@@ -156,6 +156,7 @@ export default function ProductTourWrapper({
         styles={{
           options: {
             primaryColor: 'rgb(15, 23, 42)',
+            overlayColor: 'rgba(0, 0, 0, 0.8)',
           },
         }}
         disableOverlayClose

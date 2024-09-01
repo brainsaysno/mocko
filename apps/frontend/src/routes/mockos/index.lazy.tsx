@@ -10,6 +10,8 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useProductTourContext } from '@/context/ProductTourContext';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import useIsOnboarded from '@/hooks/useIsOnboarded';
+import Signature from '@/components/Signature';
+import { cn } from '@/lib/utils';
 
 export const Route = createLazyFileRoute('/mockos/')({
   component: Mockos,
@@ -53,9 +55,23 @@ function Mockos() {
         initial={{ y: 200 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
+        whileHover={{ rotate: 5, scale: 1.05 }}
         id="next-thing"
       >
         <img src={MockoEyesClosed} className="-rotate-12" alt="Mocko Logo" />
+      </motion.div>
+      <motion.div
+        className="absolute bottom-4 w-48 md:w-80 left-[21rem] z-[10001]"
+        initial={{ x: -300, y: 100 }}
+        animate={{ x: 0, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <Signature
+          className={cn(
+            'text-sm text-left',
+            !isOnboarded && 'text-white stroke-white fill-white'
+          )}
+        />
       </motion.div>
     </main>
   );

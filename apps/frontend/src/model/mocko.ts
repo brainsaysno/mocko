@@ -1,4 +1,4 @@
-import { API_BASE_URL, generateAIProseMocko } from '@/lib/api';
+import { API_BASE_URL } from '@/lib/api';
 import { z } from 'zod';
 
 export enum MockoType {
@@ -29,7 +29,8 @@ export abstract class Mocko {
     this.runtimeVariables = this.getRuntimeVariables();
   }
 
-  protected interpolateVariables(runtimeValues: Map<string, string>) {
+  protected interpolateVariables(runtimeValues?: Map<string, string>) {
+    if (!runtimeValues) return this.content;
     return this.content.replace(VARIABLE_REGEX, (_, identifier) => {
       return runtimeValues.get(identifier) ?? `[${identifier}]`;
     });
@@ -55,6 +56,14 @@ export abstract class Mocko {
         throw new Error(`Unknown mocko type: ${json.type}`);
     }
   }
+
+  static getCommonSchema() {
+    return z.object({
+      id: z.number(),
+      name: z.string(),
+      content: z.string(),
+    });
+  }
 }
 
 export enum LLMModel {
@@ -73,10 +82,7 @@ export class AIProseMocko extends Mocko {
   }
 
   static fromJson(json: any) {
-    const schema = z.object({
-      id: z.number(),
-      name: z.string(),
-      content: z.string(),
+    const schema = Mocko.getCommonSchema().extend({
       model: z.nativeEnum(LLMModel),
     });
 
@@ -85,8 +91,8 @@ export class AIProseMocko extends Mocko {
     return new AIProseMocko(dto.id, dto.name, dto.content, dto.model);
   }
 
-  async generateOne(options: MockoExportOptions) {
-    const prompt = this.interpolateVariables(options.runtimeValues);
+  async generateOne(options?: MockoExportOptions) {
+    const prompt = this.interpolateVariables(options?.runtimeValues);
 
     const generateMockoResponseSchema = z.object({
       mock: z.string(),
@@ -113,18 +119,14 @@ export class FixedMocko extends Mocko {
   }
 
   static fromJson(json: any) {
-    const schema = z.object({
-      id: z.number(),
-      name: z.string(),
-      content: z.string(),
-    });
+    const schema = Mocko.getCommonSchema();
 
     const dto = schema.parse(json);
 
     return new FixedMocko(dto.id, dto.name, dto.content);
   }
 
-  async generateOne(options: MockoExportOptions) {
-    return this.interpolateVariables(options.runtimeValues);
+  async generateOne(options?: MockoExportOptions) {
+    return this.interpolateVariables(options?.runtimeValues);
   }
 }

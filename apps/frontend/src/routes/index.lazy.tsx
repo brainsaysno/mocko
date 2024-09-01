@@ -5,6 +5,7 @@ import { Link, createLazyFileRoute } from '@tanstack/react-router';
 import MockoLogo from '../assets/mocko-logo.webp';
 import { P } from '@/components/typography/p';
 import { motion } from 'framer-motion';
+import Signature from '@/components/Signature';
 
 export const Route = createLazyFileRoute('/')({
   component: Index,
@@ -29,6 +30,7 @@ function Index() {
         <Link className={buttonVariants()} to="/mockos">
           {data && data.length == 0 ? 'Get Started' : 'Go to Mockos'}
         </Link>
+        <Signature className="justify-center" />
       </section>
     </main>
   );
