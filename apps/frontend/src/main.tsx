@@ -10,7 +10,15 @@ import { routeTree } from './routeTree.gen';
 
 posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
   api_host: import.meta.env.VITE_POSTHOG_HOST,
+  ui_host: 'us.posthog.com',
+
   person_profiles: 'always',
+  session_recording: {
+    maskAllInputs: false,
+    maskInputOptions: {
+      password: true,
+    },
+  },
 });
 
 const router = createRouter({ routeTree });

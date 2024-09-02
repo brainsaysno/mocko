@@ -1,6 +1,22 @@
 :80 {
 	encode gzip
 
+  handle_path /phproxy/static* {
+    rewrite * /static/{path}
+    reverse_proxy https://us-assets.i.posthog.com:443 {
+      header_up Host us-assets.i.posthog.com
+      header_down -Access-Control-Allow-Origin
+    }
+  }
+
+  handle_path /phproxy* {
+    rewrite * {path}
+    reverse_proxy https://us.i.posthog.com:443 {
+      header_up Host us.i.posthog.com
+      header_down -Access-Control-Allow-Origin
+    }
+  }
+
 	handle {
 		root * /var/www/html
 		try_files {path} /index.html
