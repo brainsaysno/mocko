@@ -28,7 +28,7 @@ export const Route = createLazyFileRoute('/mockos/new')({
 function NewMocko() {
   return (
     <main className="w-screen h-screen overflow-hidden p-12 bg-pattern">
-      <motion.div initial="rest" whileHover="hover">
+      <motion.div initial="rest" whileHover="hover" className="mb-2">
         <Link to="/mockos" className="flex items-center gap-1">
           <ChevronLeft />
           <motion.p
