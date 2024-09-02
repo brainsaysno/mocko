@@ -25,6 +25,10 @@ import {
 } from './ui/dialog';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
+import { X } from 'lucide-react';
+import { db } from '@/lib/db';
+import { useQueryClient } from '@tanstack/react-query';
+import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
 
 const prefixes: Record<MockoType, string> = {
   [MockoType.AIStructured]: 'AI Structured',
@@ -156,6 +160,13 @@ export default function MockoCard({
     exportMocko(exportAction, { runtimeValues });
   };
 
+  const queryClient = useQueryClient();
+
+  const onDeleteMocko = () => {
+    db.mockos.delete(mocko.id);
+    queryClient.invalidateQueries({ queryKey: [MOCKOS_QUERY_KEY] });
+  };
+
   return (
     <Dialog
       open={!!dialogContent || isInputingRuntimeVariables}
@@ -168,7 +179,13 @@ export default function MockoCard({
             onOpenChange={(o) => o || onEmailClose()}
           >
             <PopoverTrigger asChild>
-              <div className="w-72 h-40 rounded-md overflow-clip border-2 border-black mocko-card">
+              <div className="relative w-72 h-40 rounded-md overflow-clip border-2 border-black mocko-card group">
+                <div
+                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+                  onClick={onDeleteMocko}
+                >
+                  <X size={20} className="fill-red-600 stroke-red-600" />
+                </div>
                 <div className="h-2/3 bg-slate-100 flex justify-center items-center border-b-2 border-black">
                   <div>
                     <p>{prefixes[mocko.type]}</p>
