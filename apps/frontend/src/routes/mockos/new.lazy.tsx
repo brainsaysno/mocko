@@ -98,7 +98,7 @@ function NewFixedMocko() {
             <FormItem>
               <FormLabel>Mocko Name</FormLabel>
               <FormControl>
-                <Input placeholder="Teacher Email" {...field} />
+                <Input placeholder="Teacher Email" {...field} data-testid="name-input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -115,6 +115,7 @@ function NewFixedMocko() {
                   placeholder="Whatever you can think of"
                   className="resize-none"
                   {...field}
+                  data-testid="content-input"
                 />
               </FormControl>
               <FormDescription>

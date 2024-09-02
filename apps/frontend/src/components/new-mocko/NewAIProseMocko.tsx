@@ -61,9 +61,9 @@ export default function NewAIProseMocko() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mocko Name</FormLabel>
+              <FormLabel htmlFor="name">Mocko Name</FormLabel>
               <FormControl>
-                <Input placeholder="ex. Store Product" {...field} />
+                <Input placeholder="ex. Store Product" {...field} data-testid="name-input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -75,9 +75,10 @@ export default function NewAIProseMocko() {
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What do you want to mock?</FormLabel>
+              <FormLabel htmlFor="content">What do you want to mock?</FormLabel>
               <FormControl>
                 <Textarea
+                  data-testid="content-input"
                   placeholder="ex. A short product description."
                   className="resize-none"
                   {...field}
@@ -93,9 +94,10 @@ export default function NewAIProseMocko() {
           name="example"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Example output (Optional)</FormLabel>
+              <FormLabel htmlFor="example">Example output (Optional)</FormLabel>
               <FormControl>
                 <Textarea
+                  data-testid="example-input"
                   placeholder="ex. Eco-friendly bamboo toothbrush, soft bristles."
                   className="resize-none"
                   {...field}
@@ -116,6 +118,7 @@ export default function NewAIProseMocko() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  data-testid="model-select"
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a model" />
