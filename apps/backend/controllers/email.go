@@ -31,13 +31,12 @@ func (e EmailController) SendEmail(c *gin.Context) {
 		return
 	}
 
-	// Set up authentication information.
 	auth := smtp.PlainAuth("", emailFrom, emailPassword, emailServer)
 
-	// Connect to the server, authenticate, set the sender and recipient,
-	// and send the email all in one step.
+	disclaimer := "[THIS IS AN AUTOMATED MESSAGE]"
+
 	to := []string{requestBody.Recipient}
-	msg := []byte("To: " + requestBody.Recipient + "\r\n" + requestBody.Content)
+	msg := []byte("To: " + requestBody.Recipient + "\r\n" + disclaimer + "\r\n\r\n" + requestBody.Content + "\r\n\r\n" + disclaimer)
 	err := smtp.SendMail(emailServer+":"+emailPort, auth, emailFrom, to, msg)
 	if err != nil {
 		log.Fatal(err)
