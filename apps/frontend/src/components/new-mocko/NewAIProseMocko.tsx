@@ -26,6 +26,7 @@ import { useNavigate } from '@tanstack/react-router';
 const newFixedMockoSchema = z.object({
   name: z.string().max(15, 'Name must be smaller than 18 chars.'),
   content: z.string(),
+  example: z.string().optional(),
   model: z.nativeEnum(LLMModel),
 });
 
@@ -62,7 +63,7 @@ export default function NewAIProseMocko() {
             <FormItem>
               <FormLabel>Mocko Name</FormLabel>
               <FormControl>
-                <Input placeholder="Teacher Email" {...field} />
+                <Input placeholder="ex. Store Product" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,7 +78,7 @@ export default function NewAIProseMocko() {
               <FormLabel>What do you want to mock?</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="An email from a teacher to a student..."
+                  placeholder="ex. A short product description."
                   className="resize-none"
                   {...field}
                 />
@@ -86,6 +87,25 @@ export default function NewAIProseMocko() {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="example"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Example output (Optional)</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="ex. Eco-friendly bamboo toothbrush, soft bristles."
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="model"

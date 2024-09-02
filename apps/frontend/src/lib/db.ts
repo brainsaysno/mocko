@@ -7,6 +7,7 @@ export const dbMockoSchema = z.object({
   type: z.nativeEnum(MockoType),
   name: z.string(),
   content: z.string(),
+  example: z.string().optional(),
   model: z.nativeEnum(LLMModel).optional(),
 });
 
@@ -31,8 +32,8 @@ db.on('populate', (tx) => {
   tx.table('mockos').add(initialMocko);
 });
 
-db.version(2).stores({
-  mockos: '++id, type, name, content, model',
+db.version(3).stores({
+  mockos: '++id, type, name, content, example, model',
 });
 
 export type { DatabaseMocko };

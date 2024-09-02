@@ -13,7 +13,8 @@ import (
 type MockoController struct{}
 
 type AIProseBody struct {
-	Prompt string `json:"prompt"`
+	Prompt  string `json:"prompt" binding:"required"`
+	Example string `json:"example"`
 }
 
 const aiProseMockoSystemPrompt = `I want you to act as an advanced mock data generator designed to help developers create realistic, varied, and customizable datasets for testing and development purposes. Your task is to generate mock data based on the user's input, ensuring that the data fits specific criteria or requirements as described. The data should be diverse, realistic, and appropriate for use in various development scenarios. You can generate data in different formats like JSON, CSV, or plain text, and support a wide range of data types, including but not limited to:
@@ -39,6 +40,11 @@ func (m MockoController) GenerateAIProseMocko(c *gin.Context) {
 
 	const model = "gpt-4o-mini"
 
+	prompt := requestBody.Prompt
+	if requestBody.Example != "" {
+		prompt += "\n\nExample:\n" + requestBody.Example
+	}
+
 	resp, completionErr := completionService.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
@@ -50,7 +56,7 @@ func (m MockoController) GenerateAIProseMocko(c *gin.Context) {
 				},
 				{
 					Role:    "user",
-					Content: requestBody.Prompt,
+					Content: prompt,
 				},
 			},
 		},
@@ -60,9 +66,6 @@ func (m MockoController) GenerateAIProseMocko(c *gin.Context) {
 		log.Println(completionErr)
 		c.Err()
 	}
-
-	log.Println(resp)
-	log.Println(resp.Choices)
 
 	c.JSON(http.StatusOK, gin.H{
 		"mock": resp.Choices[0].Message.Content,

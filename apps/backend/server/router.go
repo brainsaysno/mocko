@@ -1,6 +1,7 @@
 package server
 
 import (
+	"apps/backend/config"
 	"apps/backend/controllers"
 
 	"github.com/gin-contrib/cors"
@@ -8,12 +9,20 @@ import (
 )
 
 func NewRouter() *gin.Engine {
+	c := config.GetConfig()
+
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"https://mocko.nrusso.dev"}
+
+	if c.Get("APP_ENV") == "development" {
+		corsConfig.AllowAllOrigins = true
+	} else {
+		corsConfig.AllowOrigins = []string{"https://mocko.nrusso.dev"}
+	}
+
 	router.Use(cors.New(corsConfig))
 
 	health := new(controllers.HealthController)
