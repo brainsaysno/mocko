@@ -74,7 +74,7 @@ function Mockos() {
         <img src={MockoEyesClosed} className="-rotate-12" alt="Mocko Logo" />
       </motion.div>
       <motion.div
-        className="absolute bottom-4 w-48 md:w-80 left-[21rem] z-[10001]"
+        className="absolute bottom-4 w-48 md:w-80 left-56 md:left-[21rem] z-[10001]"
         initial={{ x: -300, y: 100 }}
         animate={{ x: 0, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}

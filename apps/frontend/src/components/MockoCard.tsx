@@ -25,7 +25,7 @@ import {
 } from './ui/dialog';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
-import { X } from 'lucide-react';
+import { Ban, X } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
@@ -54,6 +54,7 @@ enum ExportStatus {
   Inactive = 'inactive',
   Loading = 'loading',
   Success = 'success',
+  Error = 'error',
 }
 
 export default function MockoCard({
@@ -118,13 +119,18 @@ export default function MockoCard({
   ) => {
     onGenerate?.();
     setExportStatus(ExportStatus.Loading);
-    const mockData = await mocko.generateOne(options);
-    exportActionCallbacks[action](mockData);
-    setExportStatus(ExportStatus.Success);
-    setTimeout(() => {
-      setExportStatus(ExportStatus.Inactive);
-    }, 1000);
-    afterGenerate?.();
+    try {
+      const mockData = await mocko.generateOne(options);
+      exportActionCallbacks[action](mockData);
+      setExportStatus(ExportStatus.Success);
+    } catch (e) {
+      setExportStatus(ExportStatus.Error);
+    } finally {
+      afterGenerate?.();
+      setTimeout(() => {
+        setExportStatus(ExportStatus.Inactive);
+      }, 1000);
+    }
   };
 
   const sendEmailSchema = z.object({
@@ -432,6 +438,9 @@ function ActionButton({
     >
       {exportStatus == ExportStatus.Loading && <Spinner />}
       {exportStatus == ExportStatus.Success && <CheckIcon />}
+      {exportStatus == ExportStatus.Error && (
+        <Ban size={20} className="stroke-[3] stroke-red-600" />
+      )}
       {exportStatus == ExportStatus.Inactive && children}
     </div>
   );
