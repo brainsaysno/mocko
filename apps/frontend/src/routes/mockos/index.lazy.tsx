@@ -27,13 +27,15 @@ function Mockos() {
     <main className="relative w-screen h-screen overflow-hidden p-12 bg-pattern">
       <header className="mb-8 flex justify-between items-center">
         <H1>My Mockos</H1>
-        <Link
-          className={buttonVariants({ variant: 'default' })}
-          to="/mockos/new"
-          id="tour-new-mocko-button"
-        >
-          New Mocko
-        </Link>
+        {isSuccess && data.length > 0 && (
+          <Link
+            className={buttonVariants({ variant: 'default' })}
+            to="/mockos/new"
+            id="tour-new-mocko-button"
+          >
+            New Mocko
+          </Link>
+        )}
       </header>
       <section className="flex justify-center gap-6 flex-wrap">
         {!isOnboarded && <Onboarding />}
@@ -48,6 +50,17 @@ function Mockos() {
               />
             ))
           : null}
+        {isSuccess && data.length === 0 ? (
+          <div className="flex flex-col justify-center items-center gap-6">
+            <p className="text-2xl font-medium">No mockos created yet!</p>
+            <Link
+              className={buttonVariants({ variant: 'default', size: 'lg' })}
+              to="/mockos/new"
+            >
+              New Mocko
+            </Link>
+          </div>
+        ) : null}
         {isLoading ? <p>Loading...</p> : null}
       </section>
       <motion.div
