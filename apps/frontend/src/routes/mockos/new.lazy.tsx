@@ -15,9 +15,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { db } from '@/lib/db';
 import { MockoType } from '@/model/mocko';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { ChevronLeft } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { motion } from 'framer-motion';
 
 export const Route = createLazyFileRoute('/mockos/new')({
   component: () => <NewMocko />,
@@ -26,6 +28,19 @@ export const Route = createLazyFileRoute('/mockos/new')({
 function NewMocko() {
   return (
     <main className="w-screen h-screen overflow-hidden p-12 bg-pattern">
+      <motion.div initial="rest" whileHover="hover">
+        <Link to="/mockos" className="flex items-center gap-1">
+          <ChevronLeft />
+          <motion.p
+            variants={{
+              rest: { x: -5, opacity: 0 },
+              hover: { x: 0, opacity: 100 },
+            }}
+          >
+            Back to Mockos
+          </motion.p>
+        </Link>
+      </motion.div>
       <Tabs defaultValue="ai" className="flex flex-col justify-center">
         <TabsList
           className="md:w-1/2 grid w-full grid-cols-3 mx-auto"
@@ -120,14 +135,6 @@ function NewFixedMocko() {
 }
 
 function NewDeterministicMocko() {
-  // const deterministicMockoValueTypes = z.enum(["String", "Number"])
-  //
-  // type DeterministicMockoSchema = z.infer<typeof deterministicMockoValueTypes>;
-  //
-  // const newDeterministicMockoSchema: ZodType = deterministicMockoValueTypes.or(
-  //   z.record(z.lazy())
-  // )
-
   return <p>Deterministic mocko not implemented yet!</p>;
 }
 
