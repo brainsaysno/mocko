@@ -1,5 +1,4 @@
 import { emailMocko } from '@/lib/api';
-import { Mocko, MockoExportOptions, MockoType } from '@/model/mocko';
 import { PropsWithChildren, useCallback, useRef, useState } from 'react';
 import { Popover, PopoverContent } from './ui/popover';
 import { Input } from './ui/input';
@@ -29,6 +28,7 @@ import { Ban, X } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
+import { Mocko, MockoExportOptions, MockoType } from '@/model/mocko';
 
 const prefixes: Record<MockoType, string> = {
   [MockoType.AIJson]: 'AI JSON',

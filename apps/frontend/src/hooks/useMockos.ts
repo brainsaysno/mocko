@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { Mocko } from '@/model/mocko';
+import { MockoFactory } from '@/model/mocko/MockoFactory';
 import { useQuery } from '@tanstack/react-query';
 
 export const MOCKOS_QUERY_KEY = 'mockos';
@@ -12,7 +12,9 @@ export default function useMockos() {
 
       mockos.reverse();
 
-      return mockos.map((m) => Mocko.fromJson(m));
+      const mockoFactory = new MockoFactory();
+
+      return mockos.map((m) => mockoFactory.fromJson(m));
     },
   });
 }
