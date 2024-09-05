@@ -4,6 +4,7 @@ import { z } from 'zod';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -87,6 +88,13 @@ export default function NewAIJsonMocko() {
                   {...field}
                 />
               </FormControl>
+              <FormDescription>
+                You can add{' '}
+                <span className="text-slate-600 font-medium">
+                  {'{{'} variables {'}}'}
+                </span>{' '}
+                to use later
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

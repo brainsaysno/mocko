@@ -125,7 +125,7 @@ function NewFixedMocko() {
               </FormControl>
               <FormDescription>
                 You can add{' '}
-                <span className="text-teal-500">
+                <span className="text-slate-600 font-medium">
                   {'{{'} variables {'}}'}
                 </span>{' '}
                 to use later

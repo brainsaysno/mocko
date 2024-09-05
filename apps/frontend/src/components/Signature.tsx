@@ -6,7 +6,10 @@ export default function Signature({ className }: { className?: string }) {
     <a
       href="https://github.com/brainsaysno/mocko"
       target="_blank"
-      className={cn('text-center text-sm flex items-center gap-2', className)}
+      className={cn(
+        'text-center text-sm flex items-center gap-2 w-fit mx-auto',
+        className
+      )}
     >
       <span>
         <GithubIcon />
