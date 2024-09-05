@@ -20,9 +20,10 @@ import { ChevronLeft } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
+import NewAIJsonMocko from '@/components/new-mocko/NewAIJsonMocko';
 
 export const Route = createLazyFileRoute('/mockos/new')({
-  component: () => <NewMocko />,
+  component: NewMocko,
 });
 
 function NewMocko() {
@@ -98,7 +99,11 @@ function NewFixedMocko() {
             <FormItem>
               <FormLabel>Mocko Name</FormLabel>
               <FormControl>
-                <Input placeholder="Teacher Email" {...field} data-testid="name-input" />
+                <Input
+                  placeholder="Teacher Email"
+                  {...field}
+                  data-testid="name-input"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -144,18 +149,14 @@ function NewAIMocko() {
     <Tabs defaultValue="prose" className="flex flex-col justify-center">
       <TabsList className="md:w-1/2 grid w-full grid-cols-2 mx-auto">
         <TabsTrigger value="prose">Prose</TabsTrigger>
-        <TabsTrigger value="structured">Structured</TabsTrigger>
+        <TabsTrigger value="structured">JSON</TabsTrigger>
       </TabsList>
       <TabsContent value="prose">
         <NewAIProseMocko />
       </TabsContent>
       <TabsContent value="structured">
-        <NewAIStructuredMocko />
+        <NewAIJsonMocko />
       </TabsContent>
     </Tabs>
   );
-}
-
-function NewAIStructuredMocko() {
-  return <p>AI Structured not implemented yet!</p>;
 }

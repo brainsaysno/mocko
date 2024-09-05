@@ -59,6 +59,70 @@ func (m MockoController) GenerateAIProseMocko(c *gin.Context) {
 					Content: prompt,
 				},
 			},
+			Temperature: 0.8,
+			TopP:        0.8,
+		},
+	)
+
+	if completionErr != nil {
+		log.Println(completionErr)
+		c.Err()
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"mock": resp.Choices[0].Message.Content,
+	})
+}
+
+type AIJsonBody struct {
+	Prompt    string `json:"prompt" binding:"required"`
+	Structure string `json:"structure"`
+}
+
+const aiJsonMockoSystemPrompt = `I want you to act as an advanced mock data JSON generator designed to help developers create realistic, varied, and customizable datasets for testing and development purposes. Your task is to generate mock data based on the user's input, ensuring that the data fits specific criteria or requirements as described. The data should be diverse, realistic, and appropriate for use in various development scenarios. You MUST generate data in JSON, and support a wide range of data types, including but not limited to:
+- Personal Information: Names, addresses, emails, phone numbers.
+- Financial Data: Credit card numbers, bank account information, transactions.
+- Compnany Information: Company names, industry types, employee details.
+- Product Information: Product names, descriptions, prices, SKUs.
+- Dates and Times: Historical dates, future dates, timestamps.
+- Geographical Data: Cities, countries, coordinates, postal codes.
+- Custom Data: User-defined data structures with specific fields and constraints.
+You should be able to create data that matches specific conditions, such as a range of numbers, certain string patterns, or valid formats for specific data types.
+You will be provided with a description of what needs to be generated, and based on that, you will create the appropriate mock data. You must just provide the raw data in plain text, don't add any extra explanations or markdown notation. Do not add any placeholders, you must fill all the details with fake data. `
+
+func (m MockoController) GenerateAIJsonMocko(c *gin.Context) {
+	var completionService = completion.GetService()
+
+	var requestBody AIJsonBody
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	const model = "gpt-4o-mini"
+
+	prompt := requestBody.Prompt
+	if requestBody.Structure != "" {
+		prompt += "\nYou must follow the structure provided to the best of your ability. The structure may be provided as an example or as a schema. You MUST follow the structure provided.\n\nStructure:\n" + requestBody.Structure
+	}
+
+	resp, completionErr := completionService.CreateChatCompletion(
+		context.Background(),
+		openai.ChatCompletionRequest{
+			Model: model,
+			Messages: []openai.ChatCompletionMessage{
+				{
+					Role:    "system",
+					Content: aiProseMockoSystemPrompt,
+				},
+				{
+					Role:    "user",
+					Content: prompt,
+				},
+			},
+			Temperature: 0.8,
+			TopP:        0.8,
 		},
 	)
 

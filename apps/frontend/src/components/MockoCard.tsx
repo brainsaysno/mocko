@@ -31,7 +31,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
 
 const prefixes: Record<MockoType, string> = {
-  [MockoType.AIStructured]: 'AI Structured',
+  [MockoType.AIJson]: 'AI JSON',
   [MockoType.AIProse]: 'AI Prose',
   [MockoType.Deterministic]: 'Deterministic',
   [MockoType.Fixed]: 'Fixed',
@@ -185,7 +185,10 @@ export default function MockoCard({
             onOpenChange={(o) => o || onEmailClose()}
           >
             <PopoverTrigger asChild>
-              <div className="relative w-72 h-40 rounded-md overflow-clip border-2 border-black mocko-card group" data-testid="mocko-card">
+              <div
+                className="relative w-72 h-40 rounded-md overflow-clip border-2 border-black mocko-card group"
+                data-testid="mocko-card"
+              >
                 <div
                   className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
                   onClick={onDeleteMocko}

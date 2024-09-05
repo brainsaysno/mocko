@@ -34,6 +34,7 @@ func NewRouter() *gin.Engine {
 		{
 			mocko := new(controllers.MockoController)
 			mockoGroup.POST("/ai/prose", mocko.GenerateAIProseMocko)
+			mockoGroup.POST("/ai/json", mocko.GenerateAIJsonMocko)
 		}
 
 		emailGroup := v1.Group("email")
