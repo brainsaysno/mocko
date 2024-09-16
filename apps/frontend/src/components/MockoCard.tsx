@@ -24,11 +24,12 @@ import {
 } from './ui/dialog';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
-import { Ban, X } from 'lucide-react';
+import { Ban, Edit, X } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
 import { Mocko, MockoExportOptions, MockoType } from '@/model/mocko';
+import { useNavigate } from '@tanstack/react-router';
 
 const prefixes: Record<MockoType, string> = {
   [MockoType.AIJson]: 'AI JSON',
@@ -64,6 +65,7 @@ export default function MockoCard({
   onGenerate,
 }: MockoCardProps) {
   const [exportAction, setExportAction] = useState(ExportAction.Generate);
+  const navigate = useNavigate();
 
   const recipientRef = useRef<string>();
 
@@ -173,6 +175,15 @@ export default function MockoCard({
     queryClient.invalidateQueries({ queryKey: [MOCKOS_QUERY_KEY] });
   };
 
+  const onEditMocko = () => {
+    navigate({
+      to: `/mockos/new`,
+      search: {
+        edit: mocko,
+      },
+    });
+  };
+
   return (
     <Dialog
       open={!!dialogContent || isInputingRuntimeVariables}
@@ -189,6 +200,12 @@ export default function MockoCard({
                 className="relative w-72 h-40 rounded-md overflow-clip border-2 border-black mocko-card group"
                 data-testid="mocko-card"
               >
+                <div
+                  className="absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+                  onClick={onEditMocko}
+                >
+                  <Edit size={18} className="stroke-black" />
+                </div>
                 <div
                   className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
                   onClick={onDeleteMocko}

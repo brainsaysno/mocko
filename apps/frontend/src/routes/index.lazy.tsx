@@ -25,7 +25,7 @@ function Index() {
         <img src={MockoLogo} className="h-full" alt="Mocko Logo" />
       </motion.div>
       <H1 className="text-center">Mocko</H1>
-      <section className="text-center space-y-4">
+      <section className="text-center flex flex-col items-center gap-4">
         <P className="text-center">Generate and export friendly mock data</P>
         <Link className={buttonVariants()} to="/mockos">
           {data && data.length == 0 ? 'Get Started' : 'Go to Mockos'}

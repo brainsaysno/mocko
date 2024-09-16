@@ -13,12 +13,12 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as MockosNewImport } from './routes/mockos/new'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
 const MockosIndexLazyImport = createFileRoute('/mockos/')()
-const MockosNewLazyImport = createFileRoute('/mockos/new')()
 
 // Create/Update Routes
 
@@ -32,10 +32,10 @@ const MockosIndexLazyRoute = MockosIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/mockos/index.lazy').then((d) => d.Route))
 
-const MockosNewLazyRoute = MockosNewLazyImport.update({
+const MockosNewRoute = MockosNewImport.update({
   path: '/mockos/new',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/mockos/new.lazy').then((d) => d.Route))
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -52,7 +52,7 @@ declare module '@tanstack/react-router' {
       id: '/mockos/new'
       path: '/mockos/new'
       fullPath: '/mockos/new'
-      preLoaderRoute: typeof MockosNewLazyImport
+      preLoaderRoute: typeof MockosNewImport
       parentRoute: typeof rootRoute
     }
     '/mockos/': {
@@ -69,7 +69,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  MockosNewLazyRoute,
+  MockosNewRoute,
   MockosIndexLazyRoute,
 })
 
@@ -90,7 +90,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "index.lazy.tsx"
     },
     "/mockos/new": {
-      "filePath": "mockos/new.lazy.tsx"
+      "filePath": "mockos/new.tsx"
     },
     "/mockos/": {
       "filePath": "mockos/index.lazy.tsx"

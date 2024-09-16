@@ -23,28 +23,44 @@ import { LLMModel, MockoType } from '@/model/mocko';
 import { db } from '@/lib/db';
 import { Input } from '../ui/input';
 import { useNavigate } from '@tanstack/react-router';
+import { useEditMockoContext } from '@/routes/mockos/new';
 
-const newAIProseMockoSchema = z.object({
+const newAIJsonMockoSchema = z.object({
   name: z.string().max(15, 'Name must be smaller than 18 chars.'),
   content: z.string(),
-  example: z.string().optional(),
+  structure: z.string().optional(),
   model: z.nativeEnum(LLMModel),
 });
 
-type FieldValues = z.infer<typeof newAIProseMockoSchema>;
+type FieldValues = z.infer<typeof newAIJsonMockoSchema>;
 
-export default function NewAIProseMocko() {
+const AIJsonDefaultModel = LLMModel.Gpt4oMini;
+
+export default function NewAIJsonMocko() {
   const navigate = useNavigate();
 
+  const defaultValues = useEditMockoContext();
+
+  if (defaultValues) defaultValues.model ??= AIJsonDefaultModel;
+
   const form = useForm<FieldValues>({
-    resolver: zodResolver(newAIProseMockoSchema),
-    defaultValues: {
-      model: LLMModel.Gpt4oMini,
+    resolver: zodResolver(newAIJsonMockoSchema),
+    defaultValues: defaultValues ?? {
+      model: AIJsonDefaultModel,
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    await db.mockos.add({ ...data, type: MockoType.AIProse });
+    const dto = {
+      ...data,
+      type: MockoType.AIJson,
+    };
+
+    if (defaultValues?.id) {
+      await db.mockos.update(defaultValues.id, dto);
+    } else {
+      await db.mockos.add(dto);
+    }
     navigate({
       to: '/mockos',
     });
@@ -53,7 +69,6 @@ export default function NewAIProseMocko() {
   return (
     <Form {...form}>
       <form
-        id="tour-mocko-form"
         onSubmit={form.handleSubmit(onSubmit)}
         className="md:w-2/3 space-y-6 mx-auto"
       >
@@ -103,14 +118,14 @@ export default function NewAIProseMocko() {
 
         <FormField
           control={form.control}
-          name="example"
+          name="structure"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="example">Example output (Optional)</FormLabel>
+              <FormLabel htmlFor="example">JSON Structure (Optional)</FormLabel>
               <FormControl>
                 <Textarea
-                  data-testid="example-input"
-                  placeholder="ex. Eco-friendly bamboo toothbrush, soft bristles."
+                  data-testid="structure-input"
+                  placeholder='ex. { "name": "Bamboo brush", "description": "Eco-friendly bamboo toothbrush, soft bristles." }'
                   className="resize-none"
                   {...field}
                 />
@@ -149,9 +164,7 @@ export default function NewAIProseMocko() {
             </FormItem>
           )}
         />
-        <Button type="submit" id="tour-mocko-save">
-          Save
-        </Button>
+        <Button type="submit">Save</Button>
       </form>
     </Form>
   );

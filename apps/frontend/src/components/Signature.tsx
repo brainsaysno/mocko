@@ -7,7 +7,7 @@ export default function Signature({ className }: { className?: string }) {
       href="https://github.com/brainsaysno/mocko"
       target="_blank"
       className={cn(
-        'text-center text-sm flex items-center gap-2 w-fit mx-auto',
+        'text-center text-sm flex items-center gap-2 w-fit',
         className
       )}
     >
