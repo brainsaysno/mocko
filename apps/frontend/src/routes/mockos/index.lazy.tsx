@@ -1,4 +1,3 @@
-import MockoCard from '@/components/MockoCard';
 import { H1 } from '@/components/typography/h1';
 import { Button, buttonVariants } from '@/components/ui/button';
 import useMockos from '@/hooks/useMockos';
@@ -12,6 +11,7 @@ import { DialogTitle } from '@radix-ui/react-dialog';
 import useIsOnboarded from '@/hooks/useIsOnboarded';
 import Signature from '@/components/Signature';
 import { cn } from '@/lib/utils';
+import DragNDropMockoCards from '@/components/mocko/DragNDropMockoCards';
 
 export const Route = createLazyFileRoute('/mockos/')({
   component: Mockos,
@@ -39,17 +39,13 @@ function Mockos() {
       </header>
       <section className="flex justify-center gap-6 flex-wrap">
         {!isOnboarded && <Onboarding />}
-        {isSuccess
-          ? data.map((m) => (
-              <MockoCard
-                key={m.id}
-                mocko={m}
-                disabled={isGenerating}
-                afterGenerate={() => setIsGenerating(false)}
-                onGenerate={() => setIsGenerating(true)}
-              />
-            ))
-          : null}
+        {isSuccess ? (
+          <DragNDropMockoCards
+            mockos={data}
+            isGenerating={isGenerating}
+            setIsGenerating={setIsGenerating}
+          />
+        ) : null}
         {isSuccess && data.length === 0 ? (
           <div className="flex flex-col justify-center items-center gap-6">
             <p className="text-2xl font-medium">No mockos created yet!</p>

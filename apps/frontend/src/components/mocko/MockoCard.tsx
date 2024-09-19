@@ -1,7 +1,7 @@
 import { emailMocko } from '@/lib/api';
 import { PropsWithChildren, useCallback, useRef, useState } from 'react';
-import { Popover, PopoverContent } from './ui/popover';
-import { Input } from './ui/input';
+import { Popover, PopoverContent } from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,7 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
+} from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import {
   Dialog,
@@ -21,9 +21,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import { Ban, Edit, X } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useQueryClient } from '@tanstack/react-query';
