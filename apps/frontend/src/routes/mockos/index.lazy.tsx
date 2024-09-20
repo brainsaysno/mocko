@@ -24,7 +24,7 @@ function Mockos() {
   const { isOnboarded } = useIsOnboarded();
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden p-12 bg-pattern">
+    <main className="min-h-screen w-screen p-12 bg-pattern bg-repeat">
       <header className="mb-8 flex justify-between items-center">
         <H1>My Mockos</H1>
         {isSuccess && data.length > 0 && (
@@ -60,7 +60,7 @@ function Mockos() {
         {isLoading ? <p>Loading...</p> : null}
       </section>
       <motion.div
-        className="absolute -bottom-16 w-48 md:w-80 left-12 z-[10000]"
+        className="fixed -bottom-16 w-48 md:w-80 left-12 z-[10000]"
         initial={{ y: 200 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
@@ -70,7 +70,7 @@ function Mockos() {
         <img src={MockoEyesClosed} className="-rotate-12" alt="Mocko Logo" />
       </motion.div>
       <motion.div
-        className="absolute bottom-4 w-48 md:w-80 left-56 md:left-[21rem] z-[10001]"
+        className="fixed bottom-4 w-48 md:w-80 left-56 md:left-[21rem] z-[10001]"
         initial={{ x: -300, y: 100 }}
         animate={{ x: 0, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}

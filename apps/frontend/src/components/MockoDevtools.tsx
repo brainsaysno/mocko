@@ -35,7 +35,7 @@ export default function MockoDevtools() {
 
   return (
     <Sheet>
-      <SheetTrigger className="absolute bottom-8 right-8">
+      <SheetTrigger className="fixed bottom-8 right-8">
         <div className="bg-slate-400 w-24 rounded-full relative shadow-2xl transition-colors transition-2s duration-300">
           <img src={MockoLogo} className="p-4" alt="Mocko Devtools Logo" />
           <p

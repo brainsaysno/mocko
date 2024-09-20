@@ -203,12 +203,14 @@ export default function MockoCard({
                 <div
                   className="absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
                   onClick={onEditMocko}
+                  role="button"
                 >
                   <Edit size={18} className="stroke-black" />
                 </div>
                 <div
                   className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
                   onClick={onDeleteMocko}
+                  role="button"
                 >
                   <X size={20} className="fill-red-600 stroke-red-600" />
                 </div>

@@ -10,7 +10,7 @@ import {
 } from '@dnd-kit/core';
 import {
   arrayMove,
-  rectSwappingStrategy,
+  rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
@@ -59,7 +59,7 @@ export default function DragNDropMockoCards({
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext items={sortedMockoIds} strategy={rectSwappingStrategy}>
+      <SortableContext items={sortedMockoIds} strategy={rectSortingStrategy}>
         {sortedMockoIds.map((mid) => {
           const mocko = mockos.find((m) => mid == m.id);
           if (!mocko) return null;
