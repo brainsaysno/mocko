@@ -1,9 +1,78 @@
 [
   {
-    "id": 1,
+    "id": 10,
+    "type": "ai-json",
+    "name": "Product Data",
+    "content": "Generate a product object for a retail store.",
+    "structure": "{ \"id\": \"integer\", \"name\": \"string\", \"price\": \"float\", \"stock\": \"integer\", \"category\": \"string\" }",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 9,
+    "type": "ai-json",
+    "name": "User Sign-Up",
+    "content": "A user signup object for the email: {{ email }} with password: {{ password }}",
+    "structure": "{ \"username\": \"string\", \"password\": \"string\", \"email\": \"string\", \"bio\": \"string\" }",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 8,
     "type": "ai-prose",
     "name": "Store Email",
-    "content": "An email from a store manager to a service provider asking for service on an asset",
+    "content": "Write an email from a store manager to a service provider asking for service on an asset.",
+    "example": "Dear Service Team, I’m reaching out to schedule maintenance for the {{ equipment }} located at {{ store_location }}.",
     "model": "gpt-4o-mini"
+  },
+  {
+    "id": 7,
+    "type": "ai-json",
+    "name": "Customer Info",
+    "content": "Generate a JSON object for customer information including name and contact details.",
+    "structure": "{ \"firstName\": \"string\", \"lastName\": \"string\", \"email\": \"string\", \"phone\": \"string\" }",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 6,
+    "type": "ai-prose",
+    "name": "Support Ticket",
+    "content": "Write a support ticket where a customer complains about delayed shipping and requests a refund.",
+    "example": "Subject: Shipping Delay on Order #{{ order_id }}\n\nHi, I’m still waiting for my order placed on {{ order_date }}...",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 5,
+    "type": "ai-json",
+    "name": "Inventory Update",
+    "content": "Generate a JSON object to update product inventory for an e-commerce store.",
+    "structure": "{ \"productId\": \"integer\", \"newStock\": \"integer\" }",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 4,
+    "type": "fixed",
+    "name": "Employee Data",
+    "content": "{ \"employeeId\": 451, \"name\": \"Jane Doe\", \"position\": \"Sales Manager\", \"salary\": 58000 }"
+  },
+  {
+    "id": 3,
+    "type": "ai-prose",
+    "name": "Job Application",
+    "content": "Write a cover letter for a software developer applying to a startup.",
+    "example": "Dear Hiring Manager, I’m excited to apply for the developer position at {{ company_name }}...",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 2,
+    "type": "ai-json",
+    "name": "Order Confirm",
+    "content": "Generate a JSON object for an order confirmation, including the order ID and delivery date.",
+    "structure": "{ \"orderId\": \"integer\", \"status\": \"string\", \"deliveryDate\": \"date\" }",
+    "model": "gpt-4o-mini"
+  },
+  {
+    "id": 1,
+    "type": "fixed",
+    "name": "Event Registry",
+    "content": "{ \"eventId\": 501, \"participant\": \"John Smith\", \"ticketType\": \"VIP\", \"registrationDate\": \"2024-09-01\" }"
   }
 ]
