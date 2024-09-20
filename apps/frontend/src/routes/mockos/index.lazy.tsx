@@ -24,7 +24,7 @@ function Mockos() {
   const { isOnboarded } = useIsOnboarded();
 
   return (
-    <main className="min-h-screen w-screen p-12 bg-pattern bg-repeat">
+    <main className="min-h-screen w-screen md:p-12 p-8 bg-pattern bg-repeat">
       <header className="mb-8 flex justify-between items-center">
         <H1>My Mockos</H1>
         {isSuccess && data.length > 0 && (
