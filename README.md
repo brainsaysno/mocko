@@ -114,7 +114,21 @@
 
 ## Features
 
-> TODO: Add screenshots
+| Home Page | Onboarding |
+|-|-|
+| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/7b7d2a76-3d72-4c3e-b2e1-6d2d1c185c05"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/e4efdef3-dbc0-41ae-9ecb-6804b74316fb"> |
+
+| Mocko List | Add New Mocko |
+|-|-|
+| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/8d338238-8ba4-4f86-9857-e9b321821224"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/e2c2a249-f3e5-4d5c-a588-7dcccf22a7cf"> |
+
+| Generate/Copy/Email Export | Runtime Variables |
+|-|-|
+| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/9dd4cd76-c0ce-44ad-9ff2-9c92a45535b0"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/221ce62f-e055-49a8-b873-f94f85fd0283"> |
+
+| Drag and Drop Reorder | Custom Devtools |
+|-|-|
+| <img width="1470" src="https://github.com/user-attachments/assets/174878ed-2723-49e6-b9df-025365497681"/> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/ddedddf4-2582-494e-98d8-ade2e7f51b90"> |
 
 ## Contributing
 
