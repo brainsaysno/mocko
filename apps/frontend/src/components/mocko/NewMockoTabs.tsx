@@ -20,7 +20,7 @@ export default function NewMockoTabs({
       className="flex flex-col justify-center"
     >
       <TabsList
-        className="md:w-1/2 grid w-full grid-cols-3 mx-auto"
+        className="md:w-1/2 grid w-full grid-cols-2 mx-auto"
         id="tour-mocko-type-tabs"
       >
         <TabsTrigger value="ai">AI</TabsTrigger>

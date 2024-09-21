@@ -11,7 +11,7 @@
     "id": 9,
     "type": "ai-json",
     "name": "User Sign-Up",
-    "content": "A user signup object for the email: {{ email }} with password: {{ password }}",
+    "content": "A user signup object for the email: {{ Email }} with password: {{ Password }}",
     "structure": "{ \"username\": \"string\", \"password\": \"string\", \"email\": \"string\", \"bio\": \"string\" }",
     "model": "gpt-4o-mini"
   },
@@ -35,8 +35,8 @@
     "id": 6,
     "type": "ai-prose",
     "name": "Support Ticket",
-    "content": "Write a support ticket where a customer complains about delayed shipping and requests a refund.",
-    "example": "Subject: Shipping Delay on Order #{{ order_id }}\n\nHi, I’m still waiting for my order placed on {{ order_date }}...",
+    "content": "Write a support ticket where a customer complains about {{ ComplaintReason }} and requests a refund.",
+    "example": "Subject: Shipping Delay on Order #3\n\nHi, I’m still waiting for my order placed on 3/2... Please refund my payment",
     "model": "gpt-4o-mini"
   },
   {

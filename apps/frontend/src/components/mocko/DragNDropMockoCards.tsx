@@ -30,8 +30,7 @@ export default function DragNDropMockoCards({
 }) {
   const [sortedMockoIds, setSortedMockoIds] = useState(mockos.map((m) => m.id));
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 10 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   );
 
   useEffect(() => {

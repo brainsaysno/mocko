@@ -216,7 +216,16 @@ export default function MockoCard({
                 </div>
                 <div className="h-2/3 bg-slate-100 flex justify-center items-center border-b-2 border-black">
                   <div>
-                    <p>{prefixes[mocko.type]}</p>
+                    <p>
+                      <span className="align-text-top">
+                        {prefixes[mocko.type]}
+                      </span>
+                      {mocko.runtimeVariables.length > 0 && (
+                        <span className="text-yellow-500 font-bold align-middle ml-2">
+                          {'{ }'}
+                        </span>
+                      )}
+                    </p>
                     <h4 className="text-3xl font-medium">{mocko.name}</h4>
                   </div>
                 </div>
