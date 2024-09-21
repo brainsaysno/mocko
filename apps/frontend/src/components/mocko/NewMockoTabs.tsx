@@ -24,24 +24,16 @@ export default function NewMockoTabs({
         id="tour-mocko-type-tabs"
       >
         <TabsTrigger value="ai">AI</TabsTrigger>
-        <TabsTrigger value={MockoType.Deterministic}>Deterministic</TabsTrigger>
         <TabsTrigger value={MockoType.Fixed}>Fixed</TabsTrigger>
       </TabsList>
       <TabsContent value="ai">
         <NewAIMocko defaultType={defaultType} />
-      </TabsContent>
-      <TabsContent value={MockoType.Deterministic}>
-        <NewDeterministicMocko />
       </TabsContent>
       <TabsContent value={MockoType.Fixed}>
         <NewFixedMocko />
       </TabsContent>
     </Tabs>
   );
-}
-
-function NewDeterministicMocko() {
-  return <p>Deterministic mocko not implemented yet!</p>;
 }
 
 function NewAIMocko({ defaultType }: { defaultType?: MockoType }) {
