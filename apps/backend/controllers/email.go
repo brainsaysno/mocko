@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/smtp"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,6 +15,15 @@ type EmailController struct{}
 type EmailBody struct {
 	Recipient string `json:"recipient"`
 	Content   string `json:"content"`
+}
+
+func addTopDisclaimer(body string, disclaimer string) string {
+	if strings.HasPrefix(body, "Subject: ") {
+		splits := strings.SplitN(body, "\n\n", 2)
+		return splits[0] + "\n\n" + disclaimer + "\r\n\r\n" + splits[1]
+	}
+
+	return disclaimer + "\r\n\r\n" + body
 }
 
 func (e EmailController) SendEmail(c *gin.Context) {
@@ -35,8 +45,10 @@ func (e EmailController) SendEmail(c *gin.Context) {
 
 	disclaimer := "[THIS IS AN AUTOMATED MESSAGE]"
 
+	body := addTopDisclaimer(requestBody.Content, disclaimer)
+
 	to := []string{requestBody.Recipient}
-	msg := []byte("To: " + requestBody.Recipient + "\r\n" + disclaimer + "\r\n\r\n" + requestBody.Content + "\r\n\r\n" + disclaimer)
+	msg := []byte("To: " + requestBody.Recipient + "\r\n" + body + "\r\n\r\n" + disclaimer)
 	err := smtp.SendMail(emailServer+":"+emailPort, auth, emailFrom, to, msg)
 	if err != nil {
 		log.Fatal(err)
