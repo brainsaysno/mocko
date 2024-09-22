@@ -47,7 +47,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#features">Features</a></li>
+    <li><a href="#walkthrough">Walkthrough</a></li>
     <li><a href="#contributing">Contributing</a>
       <ul>
       <li><a href="#suggesting-improvements-or-reporting-bugs">Suggesting Improvements or Reporting Bugs</a></li>
@@ -61,19 +61,68 @@
 
 ## About the Project
 
-> TODO: Add project description
+**Mocko** is a powerful tool designed to simplify the development process by generating and exporting consistent, user-friendly mock data for projects. Whether you're building apps, testing APIs, or simulating intricate environments, Mocko saves you time by automating the creation of sample data.
+
+###  Features:
+- Flexible Data Generation: Create mock data in various formats such as JSON, text, or customized outputs.
+- User-Friendly Export Options: Easily export mock data for use in your projects, with options to preview, copy, or send via email.
+- AI-Powered Mock Data: Generate realistic data for emails, customer profiles, support tickets, and more using a wide variety of LLMs.
+- Fixed Data Sets: Use pre-defined, example-driven static data for consistent testing scenarios.
+- Customizable Structures: Define custom data structures and fill them with mock values tailored to your project needs.
+
+### Why Mocko?
+**Mocko** takes the manual work out of testing workflows by providing an easy and fast way to generate the mock data you need. With options for AI-generated prose, structured JSON data, and fixed datasets, it's the perfect sidekick for any developer aiming for efficiency.
 
 ### Technologies
 
-#### Development
+#### Frontend
 
 - [Typescript](https://www.typescriptlang.org/)
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Dexie (IndexedDB)](https://dexie.org/)
+- [Framer Motion](https://www.framer.com/motion/)
 
-> TODO: Add technologies
+#### Backend
+
+- [Go](https://go.dev/)
+- [Gin](https://github.com/gin-gonic/gin)
+
+#### DevOps & Analytics
+
+- [Nx](https://nx.dev/)
+- [Fly.io](https://fly.io/)
+- [Docker](https://www.docker.com/)
+- [Caddy](https://caddyserver.com/)
+- [Posthog](https://posthog.com/)
+
+#### Testing
+
+- [Playwright](https://playwright.dev/)
+- [Vitest](https://vitest.dev/)
 
 #### Design and Prototyping
 
 - [Figma](https://www.figma.com)
+
+## Walkthrough
+
+| Home Page | Onboarding |
+|-|-|
+| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/7b7d2a76-3d72-4c3e-b2e1-6d2d1c185c05"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/e4efdef3-dbc0-41ae-9ecb-6804b74316fb"> |
+
+| Mocko List | Add New Mocko |
+|-|-|
+| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/8d338238-8ba4-4f86-9857-e9b321821224"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/e2c2a249-f3e5-4d5c-a588-7dcccf22a7cf"> |
+
+| Generate/Copy/Email Export | Runtime Variables |
+|-|-|
+| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/9dd4cd76-c0ce-44ad-9ff2-9c92a45535b0"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/221ce62f-e055-49a8-b873-f94f85fd0283"> |
+
+| Drag and Drop Reorder | Custom Devtools |
+|-|-|
+| <img width="1470" src="https://github.com/user-attachments/assets/174878ed-2723-49e6-b9df-025365497681"/> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/ddedddf4-2582-494e-98d8-ade2e7f51b90"> |
 
 ## Building Locally
 
@@ -83,7 +132,7 @@
   ```sh
   npm install -g pnpm
   ```
-- [nx](https://nx.dev/)
+- [Nx](https://nx.dev/)
   ```sh
   pnpm i -g nx
   ```
@@ -111,24 +160,6 @@
    ```sh
    nx serve backend
    ```
-
-## Features
-
-| Home Page | Onboarding |
-|-|-|
-| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/7b7d2a76-3d72-4c3e-b2e1-6d2d1c185c05"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/e4efdef3-dbc0-41ae-9ecb-6804b74316fb"> |
-
-| Mocko List | Add New Mocko |
-|-|-|
-| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/8d338238-8ba4-4f86-9857-e9b321821224"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/e2c2a249-f3e5-4d5c-a588-7dcccf22a7cf"> |
-
-| Generate/Copy/Email Export | Runtime Variables |
-|-|-|
-| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/9dd4cd76-c0ce-44ad-9ff2-9c92a45535b0"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/221ce62f-e055-49a8-b873-f94f85fd0283"> |
-
-| Drag and Drop Reorder | Custom Devtools |
-|-|-|
-| <img width="1470" src="https://github.com/user-attachments/assets/174878ed-2723-49e6-b9df-025365497681"/> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/ddedddf4-2582-494e-98d8-ade2e7f51b90"> |
 
 ## Contributing
 
