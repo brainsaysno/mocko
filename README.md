@@ -37,7 +37,9 @@
     <li>
       <a href="#about-the-project">About the Project</a>
       <ul>
-        <li><a href="#technologies">Technologies</a></li>
+         <li><a href="#features">Features</a></li>
+         <li><a href="#why-mocko">Why Mocko</a></li>
+         <li><a href="#technologies">Technologies</a></li>
       </ul>
     </li>
     <li>
@@ -63,7 +65,7 @@
 
 **Mocko** is a powerful tool designed to simplify the development process by generating and exporting consistent, user-friendly mock data for projects. Whether you're building apps, testing APIs, or simulating intricate environments, Mocko saves you time by automating the creation of sample data.
 
-###  Features:
+###  Features
 - Flexible Data Generation: Create mock data in various formats such as JSON, text, or customized outputs.
 - User-Friendly Export Options: Easily export mock data for use in your projects, with options to preview, copy, or send via email.
 - AI-Powered Mock Data: Generate realistic data for emails, customer profiles, support tickets, and more using a wide variety of LLMs.
