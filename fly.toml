@@ -9,6 +9,11 @@ primary_region = 'scl'
 [env]
 PORT = '8080'
 
+[build.args]
+VITE_API_BASE_URL = "https://mocko-be.fly.dev/v1"
+VITE_POSTHOG_KEY = "phc_eLXzMMlj3Ut5w2iIs7amALZm28hES2K0w9HJ687pD2G"
+VITE_POSTHOG_HOST = "https://mocko.nrusso.dev/phproxy"
+
 [http_service]
 internal_port = 80
 force_https = true
