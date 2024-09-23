@@ -13,8 +13,8 @@
 <br />
 <div align="center">
   <a href="https://github.com/brainsaysno/mocko">
-    <img width="75%" alt="Mocko banner" src="https://github.com/user-attachments/assets/19729761-a61c-41b0-978f-78bd845d70f7"/>
-  </a>
+    <img width="75%" alt="Mocko banner" src="https://github.com/user-attachments/assets/64f3d36d-ef2e-46a8-9efd-38072c25a6cf"/>
+ </a>
   <br/>
   <br/>
 
