@@ -56,7 +56,6 @@
       <li><a href="#resolving-issues">Resolving Issues</a></li>
       </ul>
     </li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -189,10 +188,6 @@ If you find an [issue](https://github.com/brainsaysno/mocko/issues) you want to 
 5. Commit your changes (`git commit -m 'Add PROPOSAL-NAME'`)
 6. Push to your branch (`git push origin feature/PROPOSAL-NAME`)
 7. Open a new [_pull request_](https://github.com/brainsaysno/mocko/compare) explaining your proposal and mentioning the relevant issue.
-
-## License
-
-Distributed under the GPL-3.0 License. See [license](LICENSE) for more information.
 
 ## Contact
 
