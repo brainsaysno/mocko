@@ -6,7 +6,6 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 
 </div>
 
@@ -203,5 +202,3 @@ Project Link: [https://github.com/brainsaysno/mocko](https://github.com/brainsay
 [stars-url]: https://github.com/brainsaysno/mocko/stargazers
 [issues-shield]: https://img.shields.io/github/issues/brainsaysno/mocko.svg?style=for-the-badge
 [issues-url]: https://github.com/brainsaysno/mocko/issues
-[license-shield]: https://img.shields.io/github/license/brainsaysno/mocko.svg?style=for-the-badge
-[license-url]: https://github.com/brainsaysno/mocko/blob/main/LICENSE
