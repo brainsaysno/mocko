@@ -12,9 +12,9 @@ COPY . .
 
 RUN corepack enable
 
-RUN pnpm frontend -f install
+RUN pnpm install
 
-RUN npx nx build frontend
+RUN pnpm frontend build
 
 
 FROM caddy

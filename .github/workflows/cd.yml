@@ -14,7 +14,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FRONTEND_FLY_API_TOKEN }}
   deploy-backend:
     name: Deploy Backend
     runs-on: ubuntu-latest
@@ -23,4 +23,4 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: cd apps/backend && flyctl deploy --remote-only
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.BACKEND_FLY_API_TOKEN }}

@@ -6,9 +6,6 @@
 app = 'mocko'
 primary_region = 'scl'
 
-[build]
-dockerfile = "./apps/frontend/Dockerfile"
-
 [env]
 PORT = '8080'
 

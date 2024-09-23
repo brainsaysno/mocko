@@ -42,5 +42,6 @@ Thumbs.db
 .nx/workspace-data
 
 *.env
+*.secrets
 
 **/*.env
