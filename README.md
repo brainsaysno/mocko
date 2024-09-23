@@ -13,10 +13,10 @@
 <br />
 <div align="center">
   <a href="https://github.com/brainsaysno/mocko">
-    <img src="assets/logo.jpeg" alt="Mocko Logo" style="width: 200px">
+    <img width="75%" alt="Mocko banner" src="https://github.com/user-attachments/assets/19729761-a61c-41b0-978f-78bd845d70f7"/>
   </a>
-
-<h1 align="center">Mocko</h1>
+  <br/>
+  <br/>
 
   <p align="center">
     <a href="https://github.com/brainsaysno/mocko"><strong>Explore docs »</strong></a>
