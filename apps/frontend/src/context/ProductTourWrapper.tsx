@@ -161,6 +161,7 @@ export default function ProductTourWrapper({
         }}
         disableOverlayClose
         disableCloseOnEsc
+        hideCloseButton
       />
     </>
   );
