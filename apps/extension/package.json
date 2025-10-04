@@ -1,0 +1,17 @@
+{
+  "name": "extension",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "dexie": "^4.0.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.270",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
+  }
+}

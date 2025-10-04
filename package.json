@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "frontend": "pnpm --filter=frontend",
-    "frontend-e2e": "pnpm --filter=frontend-e2e"
+    "frontend-e2e": "pnpm --filter=frontend-e2e",
+    "extension": "pnpm --filter=extension"
   },
   "private": true,
   "devDependencies": {

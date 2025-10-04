@@ -12,12 +12,14 @@ export default defineConfig({
 
   server: {
     port: 4200,
-    host: 'localhost',
+    host: 'local.mocko.nrusso.dev',
+    https: true,
   },
 
   preview: {
     port: 4300,
-    host: 'localhost',
+    host: 'local.mocko.nrusso.dev',
+    https: true,
   },
 
   plugins: [TanStackRouterVite(), react(), nxViteTsPaths(), mkcert()],
