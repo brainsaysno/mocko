@@ -2,6 +2,9 @@
   "name": "extension",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "dev": "vite"
+  },
   "dependencies": {
     "@mocko/database": "workspace:*",
     "dexie": "^4.0.8",

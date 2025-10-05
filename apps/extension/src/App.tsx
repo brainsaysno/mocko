@@ -40,13 +40,37 @@ export default function App() {
     }
   };
 
+  const openMockoWebsite = (): void => {
+    chrome.tabs.create({ url: 'https://mocko.nrusso.dev' });
+  };
+
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
       <h1 style={{ fontSize: '18px', marginBottom: '16px' }}>Mocko Extension</h1>
       {loading ? (
         <p>Loading...</p>
       ) : mockos.length === 0 ? (
-        <p>No mockos found</p>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ marginBottom: '16px' }}>No mockos found</p>
+          <button
+            onClick={openMockoWebsite}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              marginBottom: '8px',
+            }}
+          >
+            Open Mocko Website
+          </button>
+          <p style={{ fontSize: '12px', color: '#666', margin: '8px 0 0 0' }}>
+            If your mockos are not coming through, reload the page
+          </p>
+        </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '500px', overflow: 'auto' }}>
           {mockos.map((mocko) => (
