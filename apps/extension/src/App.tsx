@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { db, DatabaseMocko } from './lib/db';
 import { MockoCard, MockoType, ExportStatus, Button } from '@mocko/ui';
-import { TextCursorInput } from 'lucide-react';
-import { MockoFactory, hasRuntimeVariables } from '@mocko/core';
+import { TextCursorInput, X } from 'lucide-react';
+import { MockoFactory, hasRuntimeVariables, getRuntimeVariables } from '@mocko/core';
 import { API_BASE_URL } from './lib/api';
 
 export default function App() {
@@ -14,6 +14,9 @@ export default function App() {
   const [fillStatus, setFillStatus] = useState<ExportStatus>(
     ExportStatus.Inactive
   );
+  const [showVariablesModal, setShowVariablesModal] = useState(false);
+  const [currentMocko, setCurrentMocko] = useState<DatabaseMocko | null>(null);
+  const [variableValues, setVariableValues] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const loadMockos = async (): Promise<void> => {
@@ -31,9 +34,34 @@ export default function App() {
     loadMockos();
   }, []);
 
+  const handleMockoClick = (dbMocko: DatabaseMocko, index: number): void => {
+    const variables = getRuntimeVariables(dbMocko.content);
+
+    if (variables.length > 0) {
+      setCurrentMocko(dbMocko);
+      setActiveActionIndex(index);
+      setVariableValues({});
+      setShowVariablesModal(true);
+    } else {
+      generateAndFillInput(dbMocko, index);
+    }
+  };
+
+  const handleVariablesSubmit = (e: React.FormEvent): void => {
+    e.preventDefault();
+    if (currentMocko) {
+      const index = mockos.findIndex(m => m.id === currentMocko.id);
+      generateAndFillInput(currentMocko, index, variableValues);
+      setShowVariablesModal(false);
+      setCurrentMocko(null);
+      setVariableValues({});
+    }
+  };
+
   const generateAndFillInput = async (
     dbMocko: DatabaseMocko,
-    index: number
+    index: number,
+    runtimeValues?: Record<string, string>
   ): Promise<void> => {
     setActiveActionIndex(index);
     setFillStatus(ExportStatus.Loading);
@@ -41,7 +69,12 @@ export default function App() {
     try {
       const factory = new MockoFactory({ apiBaseUrl: API_BASE_URL });
       const mocko = factory.fromDatabaseMocko(dbMocko);
-      const content = await mocko.generateOne();
+
+      const options = runtimeValues
+        ? { runtimeValues: new Map(Object.entries(runtimeValues)) }
+        : undefined;
+
+      const content = await mocko.generateOne(options);
 
       const [tab] = await chrome.tabs.query({
         active: true,
@@ -104,7 +137,7 @@ export default function App() {
             >
               <div className="h-1/3 flex justify-center items-center bg-white">
                 <button
-                  onClick={() => generateAndFillInput(mocko, index)}
+                  onClick={() => handleMockoClick(mocko, index)}
                   disabled={
                     activeActionIndex === index &&
                     fillStatus === ExportStatus.Loading
@@ -159,6 +192,57 @@ export default function App() {
               </div>
             </MockoCard>
           ))}
+        </div>
+      )}
+
+      {showVariablesModal && currentMocko && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-80 max-w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">
+                Variables for {currentMocko.name}
+              </h2>
+              <button
+                onClick={() => {
+                  setShowVariablesModal(false);
+                  setCurrentMocko(null);
+                  setVariableValues({});
+                  setActiveActionIndex(null);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <form onSubmit={handleVariablesSubmit} className="space-y-4">
+              {getRuntimeVariables(currentMocko.content).map((variable) => (
+                <div key={variable}>
+                  <label
+                    htmlFor={variable}
+                    className="block text-sm font-medium mb-1"
+                  >
+                    {variable}
+                  </label>
+                  <input
+                    id={variable}
+                    type="text"
+                    value={variableValues[variable] || ''}
+                    onChange={(e) =>
+                      setVariableValues({
+                        ...variableValues,
+                        [variable]: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+              ))}
+              <Button type="submit" className="w-full">
+                Generate
+              </Button>
+            </form>
+          </div>
         </div>
       )}
     </div>
