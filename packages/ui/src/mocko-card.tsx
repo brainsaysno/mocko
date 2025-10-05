@@ -1,20 +1,8 @@
 import { PropsWithChildren } from 'react';
 import { cn } from './utils';
 import { Ban, Edit, X } from 'lucide-react';
-
-export enum MockoType {
-  AIJson = 'ai_json',
-  AIProse = 'ai_prose',
-  Deterministic = 'deterministic',
-  Fixed = 'fixed',
-}
-
-const prefixes: Record<MockoType, string> = {
-  [MockoType.AIJson]: 'AI JSON',
-  [MockoType.AIProse]: 'AI Prose',
-  [MockoType.Deterministic]: 'Deterministic',
-  [MockoType.Fixed]: 'Fixed',
-};
+import { MockoType } from '@mocko/database';
+import { MOCKO_TYPE_PREFIXES } from '@mocko/core';
 
 export enum ExportStatus {
   Inactive = 'inactive',
@@ -68,7 +56,7 @@ export function MockoCard({
       <div className="h-2/3 bg-slate-100 flex justify-center items-center border-b-2 border-black">
         <div>
           <p>
-            <span className="align-text-top">{prefixes[type]}</span>
+            <span className="align-text-top">{MOCKO_TYPE_PREFIXES[type]}</span>
             {hasRuntimeVariables && (
               <span className="text-yellow-500 font-bold align-middle ml-2">
                 {'{ }'}

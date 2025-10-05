@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { db, DatabaseMocko } from './lib/db';
 import { MockoCard, MockoType, ExportStatus, Button } from '@mocko/ui';
 import { TextCursorInput } from 'lucide-react';
+import { MockoFactory } from '@mocko/core';
+import { API_BASE_URL } from './lib/api';
 
 export default function App() {
   const [mockos, setMockos] = useState<DatabaseMocko[]>([]);
@@ -29,14 +31,18 @@ export default function App() {
     loadMockos();
   }, []);
 
-  const fillFirstInput = async (
-    content: string,
+  const generateAndFillInput = async (
+    dbMocko: DatabaseMocko,
     index: number
   ): Promise<void> => {
     setActiveActionIndex(index);
     setFillStatus(ExportStatus.Loading);
 
     try {
+      const factory = new MockoFactory({ apiBaseUrl: API_BASE_URL });
+      const mocko = factory.fromDatabaseMocko(dbMocko);
+      const content = await mocko.generateOne();
+
       const [tab] = await chrome.tabs.query({
         active: true,
         currentWindow: true,
@@ -58,6 +64,7 @@ export default function App() {
         setFillStatus(ExportStatus.Success);
       }
     } catch (error) {
+      console.error('Error generating mocko:', error);
       setFillStatus(ExportStatus.Error);
     } finally {
       setTimeout(() => {
@@ -69,21 +76,6 @@ export default function App() {
 
   const openMockoWebsite = (): void => {
     chrome.tabs.create({ url: 'https://mocko.nrusso.dev' });
-  };
-
-  const mapTypeToMockoType = (type: string): MockoType => {
-    switch (type) {
-      case 'ai_json':
-        return MockoType.AIJson;
-      case 'ai_prose':
-        return MockoType.AIProse;
-      case 'deterministic':
-        return MockoType.Deterministic;
-      case 'fixed':
-        return MockoType.Fixed;
-      default:
-        return MockoType.Fixed;
-    }
   };
 
   return (
@@ -102,16 +94,16 @@ export default function App() {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-3 max-h-[500px] overflow-auto">
+        <div className="flex flex-col gap-3 overflow-auto">
           {mockos.map((mocko, index) => (
             <MockoCard
               key={mocko.id}
               name={mocko.name}
-              type={mapTypeToMockoType(mocko.type)}
+              type={mocko.type}
             >
               <div className="h-1/3 flex justify-center items-center bg-white">
                 <button
-                  onClick={() => fillFirstInput(mocko.content, index)}
+                  onClick={() => generateAndFillInput(mocko, index)}
                   disabled={
                     activeActionIndex === index &&
                     fillStatus === ExportStatus.Loading

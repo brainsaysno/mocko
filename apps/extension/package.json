@@ -7,6 +7,7 @@
     "build": "vite build && BUILD_TARGET=content vite build && BUILD_TARGET=background vite build"
   },
   "dependencies": {
+    "@mocko/core": "workspace:*",
     "@mocko/database": "workspace:*",
     "@mocko/ui": "workspace:*",
     "dexie": "^4.0.8",
