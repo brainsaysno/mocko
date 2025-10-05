@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { db, DatabaseMocko } from './lib/db';
 import { MockoCard, MockoType, ExportStatus, Button } from '@mocko/ui';
 import { TextCursorInput } from 'lucide-react';
-import { MockoFactory } from '@mocko/core';
+import { MockoFactory, hasRuntimeVariables } from '@mocko/core';
 import { API_BASE_URL } from './lib/api';
 
 export default function App() {
@@ -100,6 +100,7 @@ export default function App() {
               key={mocko.id}
               name={mocko.name}
               type={mocko.type}
+              hasRuntimeVariables={hasRuntimeVariables(mocko.content)}
             >
               <div className="h-1/3 flex justify-center items-center bg-white">
                 <button

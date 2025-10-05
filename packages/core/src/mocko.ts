@@ -10,6 +10,17 @@ export const MOCKO_TYPE_PREFIXES: Record<MockoType, string> = {
   [MockoType.Fixed]: 'Fixed',
 };
 
+export function getRuntimeVariables(content: string): string[] {
+  const matches = content.matchAll(VARIABLE_REGEX);
+  return Array.from(matches)
+    .map((m) => m.at(1))
+    .filter((m) => m != undefined);
+}
+
+export function hasRuntimeVariables(content: string): boolean {
+  return getRuntimeVariables(content).length > 0;
+}
+
 export type MockoExportOptions = {
   runtimeValues: Map<string, string>;
 };
