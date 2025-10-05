@@ -9,6 +9,7 @@ export default function App() {
     const loadMockos = async (): Promise<void> => {
       try {
         const data = await db.mockos.toArray();
+        data.reverse();
         setMockos(data);
       } catch (error) {
         console.error('Error loading mockos:', error);
