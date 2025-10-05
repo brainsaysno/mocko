@@ -30,6 +30,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
 import { Mocko, MockoExportOptions, MockoType } from '@/model/mocko';
 import { useNavigate } from '@tanstack/react-router';
+import { notifyExtensionOfChange } from '@/lib/extension-sync';
 
 const prefixes: Record<MockoType, string> = {
   [MockoType.AIJson]: 'AI JSON',
@@ -170,8 +171,9 @@ export default function MockoCard({
 
   const queryClient = useQueryClient();
 
-  const onDeleteMocko = () => {
-    db.mockos.delete(mocko.id);
+  const onDeleteMocko = async () => {
+    await db.mockos.delete(mocko.id);
+    notifyExtensionOfChange();
     queryClient.invalidateQueries({ queryKey: [MOCKOS_QUERY_KEY] });
   };
 

@@ -62,6 +62,7 @@ export default function NewAIProseMocko() {
     } else {
       await db.mockos.add(dto);
     }
+    notifyExtensionOfChange();
     navigate({
       to: '/mockos',
     });
