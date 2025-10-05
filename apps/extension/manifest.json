@@ -3,7 +3,7 @@
   "name": "Mocko",
   "version": "0.0.1",
   "description": "Mocko Firefox Extension",
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "scripting", "activeTab"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

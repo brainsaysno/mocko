@@ -5,7 +5,8 @@
   "scripts": {
     "frontend": "pnpm --filter=frontend",
     "frontend-e2e": "pnpm --filter=frontend-e2e",
-    "extension": "pnpm --filter=extension"
+    "extension": "pnpm --filter=extension",
+    "extension:build": "pnpm nx build extension && BUILD_TARGET=background pnpm nx build extension && BUILD_TARGET=content pnpm nx build extension"
   },
   "private": true,
   "devDependencies": {
