@@ -15,6 +15,10 @@ async function syncData(data: unknown[]): Promise<{ success: boolean; count?: nu
     const allData = await db.mockos.toArray();
     console.log('Current data in extension IndexedDB:', allData);
 
+    chrome.runtime.sendMessage({ type: 'MOCKOS_UPDATED' }).catch(() => {
+      console.log('No popup open to notify');
+    });
+
     return { success: true, count: validatedData.length };
   } catch (error) {
     console.error('Error syncing data:', error);

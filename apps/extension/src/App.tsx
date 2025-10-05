@@ -3,7 +3,7 @@ import { db, DatabaseMocko } from './lib/db';
 import { MockoCard, MockoType, ExportStatus, Button } from '@mocko/ui';
 import { TextCursorInput, X } from 'lucide-react';
 import { MockoFactory, hasRuntimeVariables, getRuntimeVariables } from '@mocko/core';
-import { API_BASE_URL } from './lib/api';
+import { API_BASE_URL, WEB_BASE_URL } from './lib/api';
 
 export default function App() {
   const [mockos, setMockos] = useState<DatabaseMocko[]>([]);
@@ -32,6 +32,19 @@ export default function App() {
     };
 
     loadMockos();
+
+    const messageListener = (message: { type: string }) => {
+      if (message.type === 'MOCKOS_UPDATED') {
+        console.log('Received MOCKOS_UPDATED message, reloading...');
+        loadMockos();
+      }
+    };
+
+    chrome.runtime.onMessage.addListener(messageListener);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(messageListener);
+    };
   }, []);
 
   const handleMockoClick = (dbMocko: DatabaseMocko, index: number): void => {
@@ -108,7 +121,12 @@ export default function App() {
   };
 
   const openMockoWebsite = (): void => {
-    chrome.tabs.create({ url: 'https://mocko.nrusso.dev' });
+    chrome.tabs.create({ url: WEB_BASE_URL });
+  };
+
+  const handleEditMocko = (mocko: DatabaseMocko): void => {
+    const editUrl = `${WEB_BASE_URL}/mockos/new?edit=${encodeURIComponent(JSON.stringify(mocko))}`;
+    chrome.tabs.create({ url: editUrl });
   };
 
   return (
@@ -134,6 +152,7 @@ export default function App() {
               name={mocko.name}
               type={mocko.type}
               hasRuntimeVariables={hasRuntimeVariables(mocko.content)}
+              onEdit={() => handleEditMocko(mocko)}
             >
               <div className="h-1/3 flex justify-center items-center bg-white">
                 <button
