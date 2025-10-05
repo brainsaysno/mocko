@@ -7,6 +7,7 @@ const isBackground = process.env.BUILD_TARGET === 'background';
 const isContent = process.env.BUILD_TARGET === 'content';
 
 export default defineConfig({
+  base: './',
   plugins: [
     react(),
     {
