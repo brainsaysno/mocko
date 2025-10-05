@@ -1,13 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db, DatabaseMocko } from './lib/db';
-import {
-  MockoCard,
-  ExportButtons,
-  MockoType,
-  ExportStatus,
-  Button,
-} from '@mocko/ui';
-import { Copy } from 'lucide-react';
+import { MockoCard, MockoType, ExportStatus, Button } from '@mocko/ui';
+import { TextCursorInput } from 'lucide-react';
 
 export default function App() {
   const [mockos, setMockos] = useState<DatabaseMocko[]>([]);
@@ -15,7 +9,7 @@ export default function App() {
   const [activeActionIndex, setActiveActionIndex] = useState<number | null>(
     null
   );
-  const [actionStatus, setActionStatus] = useState<ExportStatus>(
+  const [fillStatus, setFillStatus] = useState<ExportStatus>(
     ExportStatus.Inactive
   );
 
@@ -40,7 +34,7 @@ export default function App() {
     index: number
   ): Promise<void> => {
     setActiveActionIndex(index);
-    setActionStatus(ExportStatus.Loading);
+    setFillStatus(ExportStatus.Loading);
 
     try {
       const [tab] = await chrome.tabs.query({
@@ -61,30 +55,13 @@ export default function App() {
           },
           args: [content],
         });
-        setActionStatus(ExportStatus.Success);
+        setFillStatus(ExportStatus.Success);
       }
     } catch (error) {
-      setActionStatus(ExportStatus.Error);
+      setFillStatus(ExportStatus.Error);
     } finally {
       setTimeout(() => {
-        setActionStatus(ExportStatus.Inactive);
-        setActiveActionIndex(null);
-      }, 1000);
-    }
-  };
-
-  const copyContent = async (content: string, index: number): Promise<void> => {
-    setActiveActionIndex(index);
-    setActionStatus(ExportStatus.Loading);
-
-    try {
-      await navigator.clipboard.writeText(content);
-      setActionStatus(ExportStatus.Success);
-    } catch (error) {
-      setActionStatus(ExportStatus.Error);
-    } finally {
-      setTimeout(() => {
-        setActionStatus(ExportStatus.Inactive);
+        setFillStatus(ExportStatus.Inactive);
         setActiveActionIndex(null);
       }, 1000);
     }
@@ -132,17 +109,61 @@ export default function App() {
               name={mocko.name}
               type={mapTypeToMockoType(mocko.type)}
             >
-              <ExportButtons
-                onGenerate={() => fillFirstInput(mocko.content, index)}
-                onCopy={() => copyContent(mocko.content, index)}
-                generateStatus={
-                  activeActionIndex === index
-                    ? actionStatus
-                    : ExportStatus.Inactive
-                }
-                copyStatus={ExportStatus.Inactive}
-                emailStatus={ExportStatus.Inactive}
-              />
+              <div className="h-1/3 flex justify-center items-center bg-white">
+                <button
+                  onClick={() => fillFirstInput(mocko.content, index)}
+                  disabled={
+                    activeActionIndex === index &&
+                    fillStatus === ExportStatus.Loading
+                  }
+                  className="w-8 h-8 bg-slate-200 rounded-sm flex justify-center items-center border border-black cursor-pointer hover:bg-slate-300 disabled:cursor-wait"
+                  aria-label="Fill first input"
+                >
+                  {activeActionIndex === index &&
+                    fillStatus === ExportStatus.Loading && (
+                      <div className="animate-spin">~</div>
+                    )}
+                  {activeActionIndex === index &&
+                    fillStatus === ExportStatus.Success && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={3}
+                        className="size-5 stroke-green-600"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    )}
+                  {activeActionIndex === index &&
+                    fillStatus === ExportStatus.Error && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-5 stroke-red-600"
+                      >
+                        <circle cx="12" cy="12" r="10" strokeWidth={2} />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 9l-6 6m0-6l6 6"
+                        />
+                      </svg>
+                    )}
+                  {(activeActionIndex !== index ||
+                    fillStatus === ExportStatus.Inactive) && (
+                    <TextCursorInput size={20} />
+                  )}
+                </button>
+              </div>
             </MockoCard>
           ))}
         </div>
