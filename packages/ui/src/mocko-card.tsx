@@ -71,65 +71,48 @@ export function MockoCard({
   );
 }
 
+export interface ActionButtonConfig {
+  onClick: () => void;
+  status?: ExportStatus;
+  label: string;
+  icon: React.ReactNode;
+}
+
 export interface ExportButtonsProps {
-  onGenerate?: () => void;
-  onCopy?: () => void;
-  onEmail?: () => void;
-  generateStatus?: ExportStatus;
-  copyStatus?: ExportStatus;
-  emailStatus?: ExportStatus;
+  buttons: ActionButtonConfig[];
   disabled?: boolean;
+  className?: string;
 }
 
 export function ExportButtons({
-  onGenerate,
-  onCopy,
-  onEmail,
-  generateStatus = ExportStatus.Inactive,
-  copyStatus = ExportStatus.Inactive,
-  emailStatus = ExportStatus.Inactive,
+  buttons,
   disabled = false,
+  className,
 }: ExportButtonsProps) {
   return (
     <div
-      className="h-1/3 flex justify-center items-center gap-4 bg-white"
+      className={cn(
+        'h-1/3 flex justify-center items-center gap-4 bg-white',
+        className
+      )}
       id="tour-export-buttons"
     >
-      {onGenerate && (
+      {buttons.map((button, index) => (
         <ActionButton
-          action={onGenerate}
-          exportStatus={generateStatus}
+          key={index}
+          action={button.onClick}
+          exportStatus={button.status ?? ExportStatus.Inactive}
           disabled={disabled}
-          label="Generate Mocko"
+          label={button.label}
         >
-          <GenerateIcon />
+          {button.icon}
         </ActionButton>
-      )}
-      {onCopy && (
-        <ActionButton
-          action={onCopy}
-          exportStatus={copyStatus}
-          disabled={disabled}
-          label="Copy Mocko"
-        >
-          <CopyIcon />
-        </ActionButton>
-      )}
-      {onEmail && (
-        <ActionButton
-          action={onEmail}
-          exportStatus={emailStatus}
-          disabled={disabled}
-          label="Email Mocko"
-        >
-          <EmailIcon />
-        </ActionButton>
-      )}
+      ))}
     </div>
   );
 }
 
-function GenerateIcon() {
+export function GenerateIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +150,7 @@ export function CopyIcon() {
   );
 }
 
-function EmailIcon() {
+export function EmailIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -182,6 +165,25 @@ function EmailIcon() {
         strokeLinejoin="round"
         d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"
       />
+    </svg>
+  );
+}
+
+export function FillInputIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width={1.5}
+      className="size-5"
+      fill="none"
+    >
+      <path d="M12 20h-1a2 2 0 0 1-2-2 2 2 0 0 1-2 2H6" />
+      <path d="M13 8h7a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7" />
+      <path d="M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1" />
+      <path d="M6 4h1a2 2 0 0 1 2 2 2 2 0 0 1 2-2h1" />
+      <path d="M9 6v12" />
     </svg>
   );
 }

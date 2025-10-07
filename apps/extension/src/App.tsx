@@ -1,8 +1,21 @@
 import { useState, useEffect } from 'react';
 import { db, DatabaseMocko } from './lib/db';
-import { MockoCard, MockoType, ExportStatus, Button } from '@mocko/ui';
-import { TextCursorInput, X } from 'lucide-react';
-import { MockoFactory, hasRuntimeVariables, getRuntimeVariables } from '@mocko/core';
+import {
+  MockoCard,
+  MockoType,
+  ExportStatus,
+  Button,
+  ExportButtons,
+  CopyIcon,
+  FillInputIcon,
+  type ActionButtonConfig,
+} from '@mocko/ui';
+import { X } from 'lucide-react';
+import {
+  MockoFactory,
+  hasRuntimeVariables,
+  getRuntimeVariables,
+} from '@mocko/core';
 import { API_BASE_URL, WEB_BASE_URL } from './lib/api';
 
 export default function App() {
@@ -14,9 +27,15 @@ export default function App() {
   const [fillStatus, setFillStatus] = useState<ExportStatus>(
     ExportStatus.Inactive
   );
+  const [copyStatus, setCopyStatus] = useState<ExportStatus>(
+    ExportStatus.Inactive
+  );
   const [showVariablesModal, setShowVariablesModal] = useState(false);
   const [currentMocko, setCurrentMocko] = useState<DatabaseMocko | null>(null);
-  const [variableValues, setVariableValues] = useState<Record<string, string>>({});
+  const [variableValues, setVariableValues] = useState<Record<string, string>>(
+    {}
+  );
+  const [actionType, setActionType] = useState<'fill' | 'copy'>('fill');
 
   useEffect(() => {
     const loadMockos = async (): Promise<void> => {
@@ -47,24 +66,37 @@ export default function App() {
     };
   }, []);
 
-  const handleMockoClick = (dbMocko: DatabaseMocko, index: number): void => {
+  const handleMockoClick = (
+    dbMocko: DatabaseMocko,
+    index: number,
+    action: 'fill' | 'copy'
+  ): void => {
     const variables = getRuntimeVariables(dbMocko.content);
 
     if (variables.length > 0) {
       setCurrentMocko(dbMocko);
       setActiveActionIndex(index);
       setVariableValues({});
+      setActionType(action);
       setShowVariablesModal(true);
     } else {
-      generateAndFillInput(dbMocko, index);
+      if (action === 'fill') {
+        generateAndFillInput(dbMocko, index);
+      } else {
+        generateAndCopy(dbMocko, index);
+      }
     }
   };
 
   const handleVariablesSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     if (currentMocko) {
-      const index = mockos.findIndex(m => m.id === currentMocko.id);
-      generateAndFillInput(currentMocko, index, variableValues);
+      const index = mockos.findIndex((m) => m.id === currentMocko.id);
+      if (actionType === 'fill') {
+        generateAndFillInput(currentMocko, index, variableValues);
+      } else {
+        generateAndCopy(currentMocko, index, variableValues);
+      }
       setShowVariablesModal(false);
       setCurrentMocko(null);
       setVariableValues({});
@@ -120,12 +152,45 @@ export default function App() {
     }
   };
 
+  const generateAndCopy = async (
+    dbMocko: DatabaseMocko,
+    index: number,
+    runtimeValues?: Record<string, string>
+  ): Promise<void> => {
+    setActiveActionIndex(index);
+    setCopyStatus(ExportStatus.Loading);
+
+    try {
+      const factory = new MockoFactory({ apiBaseUrl: API_BASE_URL });
+      const mocko = factory.fromDatabaseMocko(dbMocko);
+
+      const options = runtimeValues
+        ? { runtimeValues: new Map(Object.entries(runtimeValues)) }
+        : undefined;
+
+      const content = await mocko.generateOne(options);
+
+      await navigator.clipboard.writeText(content);
+      setCopyStatus(ExportStatus.Success);
+    } catch (error) {
+      console.error('Error generating mocko:', error);
+      setCopyStatus(ExportStatus.Error);
+    } finally {
+      setTimeout(() => {
+        setCopyStatus(ExportStatus.Inactive);
+        setActiveActionIndex(null);
+      }, 1000);
+    }
+  };
+
   const openMockoWebsite = (): void => {
     chrome.tabs.create({ url: WEB_BASE_URL });
   };
 
   const handleEditMocko = (mocko: DatabaseMocko): void => {
-    const editUrl = `${WEB_BASE_URL}/mockos/new?edit=${encodeURIComponent(JSON.stringify(mocko))}`;
+    const editUrl = `${WEB_BASE_URL}/mockos/new?edit=${encodeURIComponent(
+      JSON.stringify(mocko)
+    )}`;
     chrome.tabs.create({ url: editUrl });
   };
 
@@ -154,61 +219,33 @@ export default function App() {
               hasRuntimeVariables={hasRuntimeVariables(mocko.content)}
               onEdit={() => handleEditMocko(mocko)}
             >
-              <div className="h-1/3 flex justify-center items-center bg-white">
-                <button
-                  onClick={() => handleMockoClick(mocko, index)}
-                  disabled={
-                    activeActionIndex === index &&
-                    fillStatus === ExportStatus.Loading
-                  }
-                  className="w-8 h-8 bg-slate-200 rounded-sm flex justify-center items-center border border-black cursor-pointer hover:bg-slate-300 disabled:cursor-wait"
-                  aria-label="Fill first input"
-                >
-                  {activeActionIndex === index &&
-                    fillStatus === ExportStatus.Loading && (
-                      <div className="animate-spin">~</div>
-                    )}
-                  {activeActionIndex === index &&
-                    fillStatus === ExportStatus.Success && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={3}
-                        className="size-5 stroke-green-600"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m4.5 12.75 6 6 9-13.5"
-                        />
-                      </svg>
-                    )}
-                  {activeActionIndex === index &&
-                    fillStatus === ExportStatus.Error && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-5 stroke-red-600"
-                      >
-                        <circle cx="12" cy="12" r="10" strokeWidth={2} />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 9l-6 6m0-6l6 6"
-                        />
-                      </svg>
-                    )}
-                  {(activeActionIndex !== index ||
-                    fillStatus === ExportStatus.Inactive) && (
-                    <TextCursorInput size={20} />
-                  )}
-                </button>
-              </div>
+              <ExportButtons
+                buttons={[
+                  {
+                    onClick: () => handleMockoClick(mocko, index, 'copy'),
+                    status:
+                      activeActionIndex === index
+                        ? copyStatus
+                        : ExportStatus.Inactive,
+                    label: 'Copy to clipboard',
+                    icon: <CopyIcon />,
+                  },
+                  {
+                    onClick: () => handleMockoClick(mocko, index, 'fill'),
+                    status:
+                      activeActionIndex === index
+                        ? fillStatus
+                        : ExportStatus.Inactive,
+                    label: 'Fill first input',
+                    icon: <FillInputIcon />,
+                  },
+                ]}
+                disabled={
+                  activeActionIndex === index &&
+                  (fillStatus === ExportStatus.Loading ||
+                    copyStatus === ExportStatus.Loading)
+                }
+              />
             </MockoCard>
           ))}
         </div>

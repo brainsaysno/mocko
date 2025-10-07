@@ -4,8 +4,12 @@ export {
   MockoCard,
   ExportButtons,
   CopyIcon,
-  MockoType,
+  GenerateIcon,
+  EmailIcon,
+  FillInputIcon,
   ExportStatus,
   type MockoCardProps,
   type ExportButtonsProps,
+  type ActionButtonConfig,
 } from './mocko-card';
+export { MockoType } from '@mocko/database';
