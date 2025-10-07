@@ -1,4 +1,6 @@
 import { MOCKO_DB_NAME } from './lib/db';
+import { triggerAutofillAnimation } from './lib/autofill-animation';
+import './autofill.css';
 
 const isTargetDomain =
   window.location.hostname === 'mocko.nrusso.dev' ||
@@ -68,5 +70,27 @@ if (isTargetDomain) {
       console.log('Received data change notification from web app');
       syncDataToExtension(event.data.data);
     }
+  });
+} else {
+  console.log('Mocko content script loaded on non-target domain');
+
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message.type === 'AUTOFILL_FIELD') {
+      const { selector, value } = message;
+      const element = document.querySelector(selector) as HTMLInputElement;
+
+      if (element && element instanceof HTMLInputElement) {
+        element.value = value;
+        element.dispatchEvent(new Event('input', { bubbles: true }));
+        element.dispatchEvent(new Event('change', { bubbles: true }));
+
+        triggerAutofillAnimation(element);
+
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false, error: 'Element not found' });
+      }
+    }
+    return true;
   });
 }

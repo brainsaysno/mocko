@@ -1,0 +1,51 @@
+@keyframes mocko-autofill {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.2, 1.2);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@-webkit-keyframes mocko-autofill {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  50% {
+    -webkit-transform: scale(1.2, 1.2);
+  }
+  100% {
+    -webkit-transform: scale(1, 1);
+  }
+}
+
+@-moz-keyframes mocko-autofill {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.2, 1.2);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.mocko-animated-fill {
+  animation: mocko-autofill 200ms ease-in-out 0ms 1;
+  -webkit-animation: mocko-autofill 200ms ease-in-out 0ms 1;
+}
+
+span.mocko-animated-fill {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mocko-animated-fill {
+    animation: none;
+    -webkit-animation: none;
+  }
+}
