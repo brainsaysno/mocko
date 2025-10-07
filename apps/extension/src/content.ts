@@ -1,4 +1,6 @@
 import { MOCKO_DB_NAME } from './lib/db';
+import { triggerAutofillAnimation, findFirstVisibleInput } from './lib/autofill-animation';
+import './autofill.css';
 
 const isTargetDomain =
   window.location.hostname === 'mocko.nrusso.dev' ||
@@ -77,7 +79,7 @@ if (isTargetDomain) {
       console.log('[Mocko Autofill] Received AUTOFILL_FIELD message:', message);
 
       const { value } = message;
-      const input = document.querySelector('input:not([disabled]):not([readonly])') as HTMLInputElement;
+      const input = findFirstVisibleInput();
 
       console.log('[Mocko Autofill] Found input:', input);
       console.log('[Mocko Autofill] Input details:', {
@@ -126,6 +128,10 @@ if (isTargetDomain) {
         input.focus();
         console.log('[Mocko Autofill] Blurred and refocused');
 
+        // Trigger autofill animation
+        triggerAutofillAnimation(input);
+        console.log('[Mocko Autofill] Triggered animation');
+
         console.log('[Mocko Autofill] Final value:', input.value);
         console.log('[Mocko Autofill] Final visual check:', {
           display: window.getComputedStyle(input).display,
@@ -135,8 +141,8 @@ if (isTargetDomain) {
 
         sendResponse({ success: true });
       } else {
-        console.error('[Mocko Autofill] No input found');
-        sendResponse({ success: false, error: 'No input found' });
+        console.error('[Mocko Autofill] No visible input found');
+        sendResponse({ success: false, error: 'No visible input found' });
       }
     }
     return true;
