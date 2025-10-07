@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Mocko",
   "version": "0.0.1",
-  "description": "Mocko Firefox Extension",
+  "description": "Mocko Browser Extension",
   "permissions": ["storage", "tabs", "scripting", "activeTab"],
   "commands": {
     "_execute_action": {
@@ -29,19 +29,20 @@
     "128": "icons/icon128.png"
   },
   "background": {
+    "service_worker": "background.js",
+    "type": "module",
     "scripts": ["background.js"]
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://mocko.nrusso.dev/*",
-        "https://local.mocko.nrusso.dev/*"
-      ],
+      "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ],
-  "host_permissions": [
-    "https://mocko.nrusso.dev/*",
-    "https://local.mocko.nrusso.dev/*"
-  ]
+  "host_permissions": ["<all_urls>"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "mocko@nrusso.dev"
+    }
+  }
 }

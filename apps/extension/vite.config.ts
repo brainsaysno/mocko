@@ -23,6 +23,7 @@ export default defineConfig({
   build: {
     outDir: '../../dist/apps/extension',
     emptyOutDir: !isBackground && !isContent,
+    minify: 'terser',
     rollupOptions: {
       input: isBackground
         ? { background: resolve(__dirname, 'src/background.ts') }
@@ -33,7 +34,7 @@ export default defineConfig({
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
         assetFileNames: '[name].[ext]',
-        format: isBackground || isContent ? 'iife' : 'es',
+        format: isContent ? 'iife' : 'es',
         inlineDynamicImports: isBackground || isContent,
       },
     },

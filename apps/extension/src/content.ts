@@ -1,6 +1,4 @@
 import { MOCKO_DB_NAME } from './lib/db';
-import { triggerAutofillAnimation } from './lib/autofill-animation';
-import './autofill.css';
 
 const isTargetDomain =
   window.location.hostname === 'mocko.nrusso.dev' ||
@@ -76,19 +74,69 @@ if (isTargetDomain) {
 
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message.type === 'AUTOFILL_FIELD') {
-      const { selector, value } = message;
-      const element = document.querySelector(selector) as HTMLInputElement;
+      console.log('[Mocko Autofill] Received AUTOFILL_FIELD message:', message);
 
-      if (element && element instanceof HTMLInputElement) {
-        element.value = value;
-        element.dispatchEvent(new Event('input', { bubbles: true }));
-        element.dispatchEvent(new Event('change', { bubbles: true }));
+      const { value } = message;
+      const input = document.querySelector('input:not([disabled]):not([readonly])') as HTMLInputElement;
 
-        triggerAutofillAnimation(element);
+      console.log('[Mocko Autofill] Found input:', input);
+      console.log('[Mocko Autofill] Input details:', {
+        tagName: input?.tagName,
+        type: input?.type,
+        id: input?.id,
+        className: input?.className,
+        placeholder: input?.placeholder,
+        currentValue: input?.value,
+        isVisible: input ? window.getComputedStyle(input).display !== 'none' : false,
+        isInViewport: input ? input.getBoundingClientRect().height > 0 : false
+      });
+
+      if (input) {
+        console.log('[Mocko Autofill] Attempting to autofill with value:', value);
+
+        input.click();
+        input.focus();
+        console.log('[Mocko Autofill] Clicked and focused input');
+
+        // Use the native setter to ensure frameworks detect the change
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          'value'
+        )?.set;
+
+        if (nativeInputValueSetter) {
+          console.log('[Mocko Autofill] Using native setter');
+          nativeInputValueSetter.call(input, value);
+        } else {
+          console.log('[Mocko Autofill] Using direct value assignment');
+          input.value = value;
+        }
+
+        console.log('[Mocko Autofill] Value after setting:', input.value);
+
+        // Dispatch events that Material UI and similar frameworks listen for
+        input.dispatchEvent(new InputEvent('input', { bubbles: true, cancelable: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        input.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
+        input.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
+        console.log('[Mocko Autofill] Dispatched all events');
+
+        // Blur and refocus to trigger validation
+        input.blur();
+        input.focus();
+        console.log('[Mocko Autofill] Blurred and refocused');
+
+        console.log('[Mocko Autofill] Final value:', input.value);
+        console.log('[Mocko Autofill] Final visual check:', {
+          display: window.getComputedStyle(input).display,
+          visibility: window.getComputedStyle(input).visibility,
+          parentClasses: input.parentElement?.className
+        });
 
         sendResponse({ success: true });
       } else {
-        sendResponse({ success: false, error: 'Element not found' });
+        console.error('[Mocko Autofill] No input found');
+        sendResponse({ success: false, error: 'No input found' });
       }
     }
     return true;

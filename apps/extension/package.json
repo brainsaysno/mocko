@@ -23,6 +23,7 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
+    "terser": "^5.44.0",
     "typescript": "^5.5.4",
     "vite": "^5.4.2"
   }

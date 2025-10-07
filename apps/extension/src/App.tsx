@@ -127,19 +127,27 @@ export default function App() {
       });
 
       if (tab.id) {
-        await chrome.scripting.executeScript({
-          target: { tabId: tab.id },
-          func: (contentToFill: string) => {
-            const input = document.querySelector('input');
-            if (input) {
-              input.value = contentToFill;
-              input.dispatchEvent(new Event('input', { bubbles: true }));
-              input.dispatchEvent(new Event('change', { bubbles: true }));
-            }
+        console.log('[Mocko Extension] Sending AUTOFILL_FIELD message with content:', content);
+
+        chrome.tabs.sendMessage(
+          tab.id,
+          {
+            type: 'AUTOFILL_FIELD',
+            value: content,
           },
-          args: [content],
-        });
-        setFillStatus(ExportStatus.Success);
+          (response) => {
+            if (chrome.runtime.lastError) {
+              console.error('[Mocko Extension] Error sending message:', chrome.runtime.lastError);
+              setFillStatus(ExportStatus.Error);
+            } else if (response?.success) {
+              console.log('[Mocko Extension] Autofill successful');
+              setFillStatus(ExportStatus.Success);
+            } else {
+              console.error('[Mocko Extension] Autofill failed:', response?.error);
+              setFillStatus(ExportStatus.Error);
+            }
+          }
+        );
       }
     } catch (error) {
       console.error('Error generating mocko:', error);
