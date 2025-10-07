@@ -218,7 +218,7 @@ export default function App() {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-3 overflow-auto">
+        <div className="flex flex-col items-center gap-3 overflow-auto scrollbar-hide">
           {mockos.map((mocko, index) => (
             <MockoCard
               key={mocko.id}
