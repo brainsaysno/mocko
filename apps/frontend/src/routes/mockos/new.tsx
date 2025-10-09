@@ -38,14 +38,20 @@ export function useEditMockoContext() {
 }
 
 function NewMocko() {
-  const { edit, mode, content, structure } = useSearch({ from: Route.fullPath });
+  const { edit, mode, content, structure } = useSearch({
+    from: Route.fullPath,
+  });
 
   // Merge edit data with query parameter prefill data
-  const contextValue = edit ?? (mode || content || structure ? {
-    type: mode,
-    content: content,
-    structure: structure,
-  } as z.infer<typeof editMockoSchema> : undefined);
+  const contextValue =
+    edit ??
+    (mode || content || structure
+      ? ({
+          type: mode,
+          content: content,
+          structure: structure,
+        } as z.infer<typeof editMockoSchema>)
+      : undefined);
 
   return (
     <main className="w-screen h-screen overflow-hidden p-12 bg-pattern">

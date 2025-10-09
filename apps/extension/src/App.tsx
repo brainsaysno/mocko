@@ -10,7 +10,7 @@ import {
   FillInputIcon,
   type ActionButtonConfig,
 } from '@mocko/ui';
-import { X } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import {
   MockoFactory,
   hasRuntimeVariables,
@@ -36,6 +36,7 @@ export default function App() {
     {}
   );
   const [actionType, setActionType] = useState<'fill' | 'copy'>('fill');
+  const [formStructure, setFormStructure] = useState<Record<string, string> | null>(null);
 
   useEffect(() => {
     const loadMockos = async (): Promise<void> => {
@@ -61,6 +62,37 @@ export default function App() {
     return () => {
       chrome.runtime.onMessage.removeListener(messageListener);
     };
+  }, []);
+
+  useEffect(() => {
+    const detectForm = async (): Promise<void> => {
+      try {
+        const [tab] = await chrome.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+
+        if (tab.id) {
+          chrome.tabs.sendMessage(
+            tab.id,
+            { type: 'DETECT_FORM' },
+            (response: { hasForm?: boolean; structure?: Record<string, string> }) => {
+              if (chrome.runtime.lastError) {
+                setFormStructure(null);
+              } else if (response?.hasForm && response?.structure) {
+                setFormStructure(response.structure);
+              } else {
+                setFormStructure(null);
+              }
+            }
+          );
+        }
+      } catch (error) {
+        setFormStructure(null);
+      }
+    };
+
+    detectForm();
   }, []);
 
   const handleMockoClick = (
@@ -192,9 +224,31 @@ export default function App() {
     chrome.tabs.create({ url: editUrl });
   };
 
+  const handleCreateNewMocko = (): void => {
+    if (formStructure) {
+      const formattedJson = JSON.stringify(formStructure, null, '\t');
+      const doubleStringified = JSON.stringify(formattedJson);
+      const structureParam = encodeURIComponent(doubleStringified);
+      const newUrl = `${WEB_BASE_URL}/mockos/new?structure=${structureParam}&mode=ai-json`;
+      chrome.tabs.create({ url: newUrl });
+    } else {
+      chrome.tabs.create({ url: `${WEB_BASE_URL}/mockos/new` });
+    }
+  };
+
   return (
     <div className="p-5 font-sans bg-pattern h-full">
-      <h1 className="text-lg font-semibold mb-4">Mocko Extension</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-lg font-semibold">Mocko Extension</h1>
+        <Button
+          onClick={handleCreateNewMocko}
+          className="flex items-center gap-1 text-sm"
+          size="sm"
+        >
+          <Plus size={16} />
+          {formStructure ? ' from Form' : ''}
+        </Button>
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : mockos.length === 0 ? (

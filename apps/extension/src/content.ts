@@ -137,7 +137,58 @@ if (isTargetDomain) {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
 
+  const inferInputType = (input: HTMLInputElement | HTMLTextAreaElement): string => {
+    if (input instanceof HTMLInputElement) {
+      const inputType = input.type.toLowerCase();
+
+      if (inputType === 'number' || inputType === 'range') {
+        return 'number';
+      }
+      if (inputType === 'email') {
+        return 'email';
+      }
+      if (inputType === 'tel') {
+        return 'phone';
+      }
+      if (inputType === 'date' || inputType === 'datetime-local') {
+        return 'date';
+      }
+      if (inputType === 'checkbox') {
+        return 'boolean';
+      }
+    }
+
+    return 'string';
+  };
+
+  const detectFormStructure = (): Record<string, string> | null => {
+    const form = document.querySelector('form');
+    if (!form) {
+      return null;
+    }
+
+    const structure: Record<string, string> = {};
+    const inputs = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+      'input:not([disabled]):not([readonly]):not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea:not([disabled]):not([readonly])'
+    );
+
+    inputs.forEach((input) => {
+      const key = input.id || input.name;
+      if (key) {
+        structure[key] = inferInputType(input);
+      }
+    });
+
+    return Object.keys(structure).length > 0 ? structure : null;
+  };
+
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message.type === 'DETECT_FORM') {
+      const structure = detectFormStructure();
+      sendResponse({ hasForm: structure !== null, structure });
+      return true;
+    }
+
     if (message.type === 'AUTOFILL_FIELD') {
       const { value } = message;
 
