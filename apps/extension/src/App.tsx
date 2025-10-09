@@ -43,8 +43,6 @@ export default function App() {
         const data = await db.mockos.toArray();
         data.reverse();
         setMockos(data);
-      } catch (error) {
-        console.error('Error loading mockos:', error);
       } finally {
         setLoading(false);
       }
@@ -54,7 +52,6 @@ export default function App() {
 
     const messageListener = (message: { type: string }) => {
       if (message.type === 'MOCKOS_UPDATED') {
-        console.log('Received MOCKOS_UPDATED message, reloading...');
         loadMockos();
       }
     };
@@ -127,8 +124,6 @@ export default function App() {
       });
 
       if (tab.id) {
-        console.log('[Mocko Extension] Sending AUTOFILL_FIELD message with content:', content);
-
         chrome.tabs.sendMessage(
           tab.id,
           {
@@ -137,20 +132,16 @@ export default function App() {
           },
           (response) => {
             if (chrome.runtime.lastError) {
-              console.error('[Mocko Extension] Error sending message:', chrome.runtime.lastError);
               setFillStatus(ExportStatus.Error);
             } else if (response?.success) {
-              console.log('[Mocko Extension] Autofill successful');
               setFillStatus(ExportStatus.Success);
             } else {
-              console.error('[Mocko Extension] Autofill failed:', response?.error);
               setFillStatus(ExportStatus.Error);
             }
           }
         );
       }
     } catch (error) {
-      console.error('Error generating mocko:', error);
       setFillStatus(ExportStatus.Error);
     } finally {
       setTimeout(() => {
@@ -181,7 +172,6 @@ export default function App() {
       await navigator.clipboard.writeText(content);
       setCopyStatus(ExportStatus.Success);
     } catch (error) {
-      console.error('Error generating mocko:', error);
       setCopyStatus(ExportStatus.Error);
     } finally {
       setTimeout(() => {

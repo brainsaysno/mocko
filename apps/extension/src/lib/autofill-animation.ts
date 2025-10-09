@@ -51,7 +51,7 @@ export function triggerAutofillAnimation(element: HTMLElement): void {
   }, ANIMATION_DURATION);
 }
 
-export function findFirstVisibleInput(): HTMLInputElement | null {
+export function findFirstVisibleInput(): HTMLInputElement | HTMLTextAreaElement | null {
   const inputs = document.querySelectorAll<HTMLInputElement>(
     'input:not([disabled]):not([readonly])'
   );
@@ -59,6 +59,16 @@ export function findFirstVisibleInput(): HTMLInputElement | null {
   for (const input of inputs) {
     if (!isElementHidden(input)) {
       return input;
+    }
+  }
+
+  const textareas = document.querySelectorAll<HTMLTextAreaElement>(
+    'textarea:not([disabled]):not([readonly])'
+  );
+
+  for (const textarea of textareas) {
+    if (!isElementHidden(textarea)) {
+      return textarea;
     }
   }
 
