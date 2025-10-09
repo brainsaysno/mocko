@@ -22,6 +22,9 @@ export const Route = createFileRoute('/mockos/new')({
   component: NewMocko,
   validateSearch: z.object({
     edit: editMockoSchema,
+    mode: z.nativeEnum(MockoType).optional(),
+    content: z.string().optional(),
+    structure: z.string().optional(),
   }),
 });
 
@@ -35,12 +38,20 @@ export function useEditMockoContext() {
 }
 
 function NewMocko() {
-  const { edit } = useSearch({ from: Route.fullPath });
+  const { edit, mode, content, structure } = useSearch({ from: Route.fullPath });
+
+  // Merge edit data with query parameter prefill data
+  const contextValue = edit ?? (mode || content || structure ? {
+    type: mode,
+    content: content,
+    structure: structure,
+  } as z.infer<typeof editMockoSchema> : undefined);
+
   return (
     <main className="w-screen h-screen overflow-hidden p-12 bg-pattern">
-      <EditMockoContext.Provider value={edit}>
+      <EditMockoContext.Provider value={contextValue}>
         <NewMockoHeader />
-        <NewMockoTabs defaultType={edit?.type} />
+        <NewMockoTabs defaultType={contextValue?.type} />
       </EditMockoContext.Provider>
     </main>
   );
