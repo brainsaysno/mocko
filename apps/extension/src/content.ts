@@ -133,6 +133,10 @@ if (isTargetDomain) {
     }
   };
 
+  const delay = (ms: number): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message.type === 'AUTOFILL_FIELD') {
       const { value } = message;
@@ -140,19 +144,44 @@ if (isTargetDomain) {
       if (isJsonObject(value)) {
         const jsonData = JSON.parse(value);
         const keys = Object.keys(jsonData);
-        let foundAnyMatch = false;
+
+        const matchedElements: Array<{
+          element: HTMLInputElement | HTMLTextAreaElement;
+          value: string;
+        }> = [];
 
         for (const key of keys) {
-          const input = findInputByIdOrName(key);
-          if (input) {
-            foundAnyMatch = true;
-            const fieldValue = String(jsonData[key]);
-            fillInput(input, fieldValue);
+          const element = findInputByIdOrName(key);
+          if (element) {
+            matchedElements.push({
+              element,
+              value: String(jsonData[key])
+            });
           }
         }
 
-        if (foundAnyMatch) {
-          sendResponse({ success: true });
+        if (matchedElements.length > 0) {
+          const allElements = [
+            ...document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+              'input:not([disabled]):not([readonly]), textarea:not([disabled]):not([readonly])'
+            )
+          ];
+
+          matchedElements.sort((a, b) => {
+            return allElements.indexOf(a.element) - allElements.indexOf(b.element);
+          });
+
+          (async () => {
+            for (let i = 0; i < matchedElements.length; i++) {
+              if (i > 0) {
+                await delay(50);
+              }
+              const { element, value } = matchedElements[i];
+              fillInput(element, value);
+            }
+            sendResponse({ success: true });
+          })();
+
           return true;
         }
       }
