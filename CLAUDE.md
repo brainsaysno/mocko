@@ -1,0 +1,1 @@
+- The extension should be built with `pnpm --filter extension build` after any changes to it

@@ -1,24 +1,11 @@
-import { LLMModel, MockoType } from '@/model/mocko';
-import Dexie, { type EntityTable } from 'dexie';
-import { z } from 'zod';
+import {
+  createMockoDatabase,
+  type DatabaseMocko,
+  dbMockoSchema,
+  MOCKO_DB_NAME,
+} from '@mocko/database';
 
-export const dbMockoSchema = z.object({
-  id: z.number(),
-  type: z.nativeEnum(MockoType),
-  name: z.string(),
-  content: z.string(),
-  example: z.string().optional(),
-  structure: z.string().optional(),
-  model: z.nativeEnum(LLMModel).optional(),
-});
-
-type DatabaseMocko = z.infer<typeof dbMockoSchema>;
-
-export const MOCKO_DB_NAME = 'MockoDatabase';
-
-const db = new Dexie(MOCKO_DB_NAME) as Dexie & {
-  mockos: EntityTable<DatabaseMocko, 'id'>;
-};
+const db = createMockoDatabase();
 
 const initialMocko = {
   id: 1,
@@ -33,9 +20,5 @@ db.on('populate', (tx) => {
   tx.table('mockos').add(initialMocko);
 });
 
-db.version(4).stores({
-  mockos: '++id, type, name, content, example, structure, model',
-});
-
 export type { DatabaseMocko };
-export { db };
+export { db, dbMockoSchema, MOCKO_DB_NAME };

@@ -1,5 +1,5 @@
 import { emailMocko } from '@/lib/api';
-import { PropsWithChildren, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { PopoverTrigger } from '@radix-ui/react-popover';
@@ -22,14 +22,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Ban, Edit, X } from 'lucide-react';
+import { Edit, X } from 'lucide-react';
 import { db } from '@/lib/db';
 import { useQueryClient } from '@tanstack/react-query';
 import { MOCKOS_QUERY_KEY } from '@/hooks/useMockos';
 import { Mocko, MockoExportOptions, MockoType } from '@/model/mocko';
 import { useNavigate } from '@tanstack/react-router';
+import { notifyExtensionOfChange } from '@/lib/extension-sync';
+import {
+  ExportButtons,
+  GenerateIcon,
+  CopyIcon as CopyIconComponent,
+  EmailIcon as EmailIconComponent,
+  ExportStatus,
+} from '@mocko/ui';
 
 const prefixes: Record<MockoType, string> = {
   [MockoType.AIJson]: 'AI JSON',
@@ -49,13 +56,6 @@ enum ExportAction {
   Generate = 'generate',
   Copy = 'copy',
   Email = 'email',
-}
-
-enum ExportStatus {
-  Inactive = 'inactive',
-  Loading = 'loading',
-  Success = 'success',
-  Error = 'error',
 }
 
 export default function MockoCard({
@@ -170,8 +170,9 @@ export default function MockoCard({
 
   const queryClient = useQueryClient();
 
-  const onDeleteMocko = () => {
-    db.mockos.delete(mocko.id);
+  const onDeleteMocko = async () => {
+    await db.mockos.delete(mocko.id);
+    notifyExtensionOfChange();
     queryClient.invalidateQueries({ queryKey: [MOCKOS_QUERY_KEY] });
   };
 
@@ -230,9 +231,26 @@ export default function MockoCard({
                   </div>
                 </div>
                 <ExportButtons
-                  onExport={onExportClick}
-                  status={exportStatus}
-                  activeAction={exportAction}
+                  buttons={[
+                    {
+                      onClick: () => onExportClick(ExportAction.Generate),
+                      status: exportAction === ExportAction.Generate ? exportStatus : ExportStatus.Inactive,
+                      label: 'Generate Mocko',
+                      icon: <GenerateIcon />,
+                    },
+                    {
+                      onClick: () => onExportClick(ExportAction.Copy),
+                      status: exportAction === ExportAction.Copy ? exportStatus : ExportStatus.Inactive,
+                      label: 'Copy Mocko',
+                      icon: <CopyIconComponent />,
+                    },
+                    {
+                      onClick: () => onExportClick(ExportAction.Email),
+                      status: exportAction === ExportAction.Email ? exportStatus : ExportStatus.Inactive,
+                      label: 'Email Mocko',
+                      icon: <EmailIconComponent />,
+                    },
+                  ]}
                   disabled={disabled}
                 />
               </div>
@@ -320,74 +338,6 @@ export default function MockoCard({
   );
 }
 
-function ExportButtons({
-  onExport,
-  activeAction,
-  status,
-  disabled,
-}: {
-  onExport: (action: ExportAction) => void;
-  activeAction: ExportAction;
-  status: ExportStatus;
-  disabled: boolean;
-}) {
-  return (
-    <div
-      className="h-1/3 flex justify-center items-center gap-4 bg-white"
-      id="tour-export-buttons"
-    >
-      <ActionButton
-        action={() => onExport(ExportAction.Generate)}
-        exportStatus={
-          activeAction == ExportAction.Generate ? status : ExportStatus.Inactive
-        }
-        disabled={disabled}
-        label="Generate Mocko"
-      >
-        <GenerateIcon />
-      </ActionButton>
-      <ActionButton
-        action={() => onExport(ExportAction.Copy)}
-        exportStatus={
-          activeAction == ExportAction.Copy ? status : ExportStatus.Inactive
-        }
-        disabled={disabled}
-        label="Copy Mocko"
-      >
-        <CopyIcon />
-      </ActionButton>
-      <ActionButton
-        action={() => onExport(ExportAction.Email)}
-        exportStatus={
-          activeAction == ExportAction.Email ? status : ExportStatus.Inactive
-        }
-        disabled={disabled}
-        label="Email Mocko"
-      >
-        <EmailIcon />
-      </ActionButton>
-    </div>
-  );
-}
-
-function GenerateIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="size-5"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="m7.49 12-3.75 3.75m0 0 3.75 3.75m-3.75-3.75h16.5V4.499"
-      />
-    </svg>
-  );
-}
 
 function CopyIcon() {
   return (
@@ -406,77 +356,4 @@ function CopyIcon() {
       />
     </svg>
   );
-}
-
-function EmailIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="size-5"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"
-      />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={3}
-      className="size-5 stroke-green-600"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="m4.5 12.75 6 6 9-13.5"
-      />
-    </svg>
-  );
-}
-
-function ActionButton({
-  children,
-  exportStatus,
-  action,
-  disabled,
-  label,
-}: PropsWithChildren<{
-  action: () => void;
-  exportStatus: ExportStatus;
-  disabled: boolean;
-  label: string;
-}>) {
-  return (
-    <div
-      className={cn(
-        'w-8 h-8 bg-slate-200 rounded-sm flex justify-center items-center border border-black',
-        disabled ? 'cursor-wait' : 'cursor-pointer'
-      )}
-      onClick={disabled ? undefined : action}
-      role="button"
-      aria-label={label}
-    >
-      {exportStatus == ExportStatus.Loading && <Spinner />}
-      {exportStatus == ExportStatus.Success && <CheckIcon />}
-      {exportStatus == ExportStatus.Error && (
-        <Ban size={20} className="stroke-[3] stroke-red-600" />
-      )}
-      {exportStatus == ExportStatus.Inactive && children}
-    </div>
-  );
-}
-
-function Spinner() {
-  return <div className="animate-spin">~</div>;
 }

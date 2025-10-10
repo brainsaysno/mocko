@@ -17,6 +17,7 @@ import { HighlightedTextarea } from '../ui/highlighted-textarea';
 import { Button } from '../ui/button';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEditMockoContext } from '@/routes/mockos/new';
+import { notifyExtensionOfChange } from '@/lib/extension-sync';
 
 export default function NewFixedMocko() {
   const newFixedMockoSchema = z.object({
@@ -46,6 +47,7 @@ export default function NewFixedMocko() {
     } else {
       await db.mockos.add(dto);
     }
+    notifyExtensionOfChange();
     await navigate({
       to: '/mockos',
     });

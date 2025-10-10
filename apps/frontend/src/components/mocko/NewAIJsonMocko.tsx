@@ -25,6 +25,7 @@ import { Input } from '../ui/input';
 import { useNavigate } from '@tanstack/react-router';
 import { useEditMockoContext } from '@/routes/mockos/new';
 import { Textarea } from '../ui/textarea';
+import { notifyExtensionOfChange } from '@/lib/extension-sync';
 
 const newAIJsonMockoSchema = z.object({
   name: z.string().max(15, 'Name must be smaller than 18 chars.'),
@@ -62,6 +63,7 @@ export default function NewAIJsonMocko() {
     } else {
       await db.mockos.add(dto);
     }
+    notifyExtensionOfChange();
     navigate({
       to: '/mockos',
     });
