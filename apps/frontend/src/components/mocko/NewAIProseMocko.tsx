@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { Textarea } from '../ui/textarea';
+import { HighlightedTextarea } from '../ui/highlighted-textarea';
 import {
   Select,
   SelectContent,
@@ -24,6 +24,7 @@ import { db } from '@/lib/db';
 import { Input } from '../ui/input';
 import { useNavigate } from '@tanstack/react-router';
 import { useEditMockoContext } from '@/routes/mockos/new';
+import { Textarea } from '../ui/textarea';
 
 const newAIProseMockoSchema = z.object({
   name: z.string().max(15, 'Name must be smaller than 18 chars.'),
@@ -98,16 +99,15 @@ export default function NewAIProseMocko() {
             <FormItem>
               <FormLabel htmlFor="content">What do you want to mock?</FormLabel>
               <FormControl>
-                <Textarea
+                <HighlightedTextarea
                   data-testid="content-input"
                   placeholder="ex. A short product description."
-                  className="resize-none"
                   {...field}
                 />
               </FormControl>
               <FormDescription>
                 You can add{' '}
-                <span className="text-slate-600 font-medium">
+                <span className="text-yellow-600 font-medium">
                   {'{{'} variables {'}}'}
                 </span>{' '}
                 to use later

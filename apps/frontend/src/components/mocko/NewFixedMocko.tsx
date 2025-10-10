@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
+import { HighlightedTextarea } from '../ui/highlighted-textarea';
 import { Button } from '../ui/button';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEditMockoContext } from '@/routes/mockos/new';
@@ -81,16 +81,15 @@ export default function NewFixedMocko() {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea
+                <HighlightedTextarea
                   placeholder="ex. Eco-friendly bamboo toothbrush, soft bristles."
-                  className="resize-none"
                   {...field}
                   data-testid="content-input"
                 />
               </FormControl>
               <FormDescription>
                 You can add{' '}
-                <span className="text-slate-600 font-medium">
+                <span className="text-yellow-600 font-medium">
                   {'{{'} variables {'}}'}
                 </span>{' '}
                 to use later
