@@ -68,7 +68,7 @@ const HighlightedTextarea = React.forwardRef<
       <div
         ref={backdropRef}
         className={cn(
-          'absolute inset-0 w-full rounded-md border border-transparent px-3 py-2 text-sm whitespace-pre-wrap break-words overflow-hidden pointer-events-none',
+          'absolute inset-0 w-full rounded-md border border-transparent px-3 py-2 text-sm whitespace-pre-wrap break-words overflow-hidden pointer-events-none bg-background',
           className
         )}
         style={{
