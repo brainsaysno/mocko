@@ -17,6 +17,7 @@ import {
   getRuntimeVariables,
 } from '@mocko/core';
 import { API_BASE_URL, WEB_BASE_URL } from './lib/api';
+import MockoEyesClosed from './assets/mocko-eyes-closed.webp';
 
 export default function App() {
   const [mockos, setMockos] = useState<DatabaseMocko[]>([]);
@@ -36,7 +37,10 @@ export default function App() {
     {}
   );
   const [actionType, setActionType] = useState<'fill' | 'copy'>('fill');
-  const [formStructure, setFormStructure] = useState<Record<string, string> | null>(null);
+  const [formStructure, setFormStructure] = useState<Record<
+    string,
+    string
+  > | null>(null);
 
   useEffect(() => {
     const loadMockos = async (): Promise<void> => {
@@ -76,7 +80,10 @@ export default function App() {
           chrome.tabs.sendMessage(
             tab.id,
             { type: 'DETECT_FORM' },
-            (response: { hasForm?: boolean; structure?: Record<string, string> }) => {
+            (response: {
+              hasForm?: boolean;
+              structure?: Record<string, string>;
+            }) => {
               if (chrome.runtime.lastError) {
                 setFormStructure(null);
               } else if (response?.hasForm && response?.structure) {
@@ -237,16 +244,26 @@ export default function App() {
   };
 
   return (
-    <div className="p-5 font-sans bg-pattern h-full">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-lg font-semibold">Mocko Extension</h1>
+    <div className="p-5 font-sans bg-pattern h-full relative overflow-hidden">
+      <div className="flex justify-between items-center mb-3">
+        <div>
+          <h1 className="text-lg font-semibold -mb-1">My Mockos</h1>
+          <a
+            onClick={() =>
+              chrome.tabs.create({ url: `${WEB_BASE_URL}/mockos` })
+            }
+            className="text-xs text-muted-foreground hover:underline cursor-pointer"
+          >
+            Go to dashboard
+          </a>
+        </div>
         <Button
           onClick={handleCreateNewMocko}
           className="flex items-center gap-1 text-sm"
           size="sm"
         >
           <Plus size={16} />
-          {formStructure ? ' from Form' : ''}
+          {formStructure ? ' From Inputs' : ' New'}
         </Button>
       </div>
       {loading ? (
@@ -353,6 +370,10 @@ export default function App() {
           </div>
         </div>
       )}
+
+      <div className="fixed -bottom-8 left-2 w-32 pointer-events-none">
+        <img src={MockoEyesClosed} className="-rotate-12" alt="Mocko Logo" />
+      </div>
     </div>
   );
 }
