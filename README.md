@@ -34,6 +34,9 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
+     <a href="#quick-demo">Quick Demo</a>
+    </li>
+    <li>
       <a href="#about-the-project">About the Project</a>
       <ul>
          <li><a href="#features">Features</a></li>
@@ -59,6 +62,14 @@
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
+
+## Quick Demo
+
+<div align="center" width="80%">
+
+https://github.com/user-attachments/assets/d8333e11-ca65-4b62-b3d1-477aa3d63b66
+
+</div>
 
 ## About the Project
 
