@@ -125,7 +125,7 @@
 
 | Drag and Drop Reorder                                                                                     | Custom Devtools                                                                                                      |
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| <img width="1470" src="https://github.com/user-attachments/assets/174878ed-2723-49e6-b9df-025365497681"/> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/ddedddf4-2582-494e-98d8-ade2e7f51b90"> |
+| <img width="480" src="https://github.com/user-attachments/assets/174878ed-2723-49e6-b9df-025365497681"/> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/ddedddf4-2582-494e-98d8-ade2e7f51b90"> |
 
 ## Building Locally
 
