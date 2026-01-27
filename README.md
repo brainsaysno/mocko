@@ -113,7 +113,7 @@
 
 | Home Page                                                                                                            | Onboarding                                                                                                           |
 | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| <img width="1470" alt="image" src="https://github.com/user-attachments/assets/7b7d2a76-3d72-4c3e-b2e1-6d2d1c185c05"> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/e4efdef3-dbc0-41ae-9ecb-6804b74316fb"> |
+| <img width="100%" alt="image" src="https://github.com/user-attachments/assets/7b7d2a76-3d72-4c3e-b2e1-6d2d1c185c05"> | <img width="100%" alt="image" src="https://github.com/user-attachments/assets/e4efdef3-dbc0-41ae-9ecb-6804b74316fb"> |
 
 | Mocko List                                                                                                           | Add New Mocko                                                                                                        |
 | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -125,7 +125,7 @@
 
 | Drag and Drop Reorder                                                                                     | Custom Devtools                                                                                                      |
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| <img width="480" src="https://github.com/user-attachments/assets/174878ed-2723-49e6-b9df-025365497681"/> | <img width="1470" alt="image" src="https://github.com/user-attachments/assets/ddedddf4-2582-494e-98d8-ade2e7f51b90"> |
+| <img width="420" src="https://github.com/user-attachments/assets/174878ed-2723-49e6-b9df-025365497681"/> | <img width="420" alt="image" src="https://github.com/user-attachments/assets/ddedddf4-2582-494e-98d8-ade2e7f51b90"> |
 
 ## Building Locally
 
