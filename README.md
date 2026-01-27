@@ -37,6 +37,7 @@
       <a href="#about-the-project">About the Project</a>
       <ul>
          <li><a href="#features">Features</a></li>
+         <li><a href="#browser-extension">Browser Extension</a></li>
          <li><a href="#why-mocko">Why Mocko</a></li>
          <li><a href="#technologies">Technologies</a></li>
       </ul>
@@ -70,14 +71,37 @@
 - AI-Powered Mock Data: Generate realistic data for emails, customer profiles, support tickets, and more using a wide variety of LLMs.
 - Fixed Data Sets: Use pre-defined, example-driven static data for consistent testing scenarios.
 - Customizable Structures: Define custom data structures and fill them with mock values tailored to your project needs.
+- Browser Extension: One-click form autofill on any website with automatic field detection (Chrome & Firefox).
+
+### Browser Extension
+
+The browser extension (Chrome & Firefox) transforms Mocko from a data generator into a **one-click form filler**. Instead of copy-pasting mock data, fill any web form instantly.
+
+**Key capabilities:**
+- **Smart Form Detection**: Automatically analyzes form structure and maps your mock data to the right fields
+- **One-Click Autofill**: Press `Ctrl+Shift+M` (or `Cmd+Shift+M` on Mac), select a template, fill the form
+- **Framework Agnostic**: Works with React, Vue, Angular, or vanilla HTML forms
+- **Live Sync**: Templates sync bidirectionally with the web app - edit anywhere, use everywhere
+- **Runtime Variables**: Use `{{ placeholders }}` for dynamic values prompted at fill time
+
+**Workflow:**
+1. Open any form on any website
+2. Hit `Ctrl+Shift+M` to open Mocko
+3. Extension auto-detects form fields
+4. Select an existing template or create one from the detected structure
+5. Click fill - fields populate with generated mock data
+
+This eliminates the repetitive cycle of generating → copying → pasting → tabbing between windows that slows down testing and development.
 
 ### Why Mocko?
 
 **Mocko** takes the manual work out of testing workflows by providing an easy and fast way to generate the mock data you need. With options for AI-generated prose, structured JSON data, and fixed datasets, it's the perfect sidekick for any developer aiming for efficiency.
 
+**With the browser extension**, Mocko goes further - your mock data flows directly into forms without leaving the page you're testing. No more alt-tabbing, copying, pasting, and reformatting. Just fill.
+
 ### Technologies
 
-#### Frontend
+#### Frontend & Extension
 
 - [Typescript](https://www.typescriptlang.org/)
 - [React](https://react.dev/)
@@ -85,6 +109,7 @@
 - [TailwindCSS](https://tailwindcss.com/)
 - [Dexie (IndexedDB)](https://dexie.org/)
 - [Framer Motion](https://www.framer.com/motion/)
+- [Browser Extension (Manifest V3)](https://developer.chrome.com/docs/extensions/mv3/intro/) - Chrome & Firefox
 
 #### Backend
 
@@ -163,6 +188,14 @@
    ```sh
    nx serve backend
    ```
+
+4. To build the browser extension:
+
+   ```sh
+   pnpm --filter extension build
+   ```
+
+   Then load the unpacked extension from `dist/apps/extension/` in Chrome's extension settings.
 
 ## Contributing
 
